@@ -39,7 +39,6 @@ class Program
                     break;
             }
         }
-
         Reader reader = new Reader();
         Model model = new Model();
         reader.GetProducts();

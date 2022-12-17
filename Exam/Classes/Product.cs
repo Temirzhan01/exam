@@ -12,16 +12,13 @@ namespace Exam.Classes
         public string Name { get; set; }
         public int Price { get; set; }
         public int HonoraryCode { get; set; }
-        [JsonIgnore]
         public State state { get; set; }
-        public string state_name {get; set;}
         public Product(int Id, string Name, int Price, State state)
         {
             this.Id = Id;
             this.Name = Name;
             this.Price = Price;
             this.state = state;
-            this.state_name = state.GetName();
         }
         public void RaisePrice(int n)
         {

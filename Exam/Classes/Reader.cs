@@ -22,28 +22,13 @@ namespace Exam.Classes
             }
             else
             {
-                using (StreamReader file = File.OpenText(@"C:\Users\data.json"))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    Reader reader = (Reader)serializer.Deserialize(file, typeof(Reader));
-                    products = reader.products;
-                    foreach (Product i in products) 
+                    Reader r = Newtonsoft.Json.JsonConvert.DeserializeObject<Reader>(File.ReadAllText(@"C:\Users\data.json"), new Newtonsoft.Json.JsonSerializerSettings
                     {
-                        if (i.state_name == "На складе") 
-                        {
-                            i.state = new InStockState();
-                        }
-                        else if (i.state_name == "На торгах")
-                        {
-                            i.state = new ForSaleState();
-                        }
-                        else if (i.state_name == "Продан")
-                        {
-                            i.state = new SoldState();
-                        }
-                    }
+                        TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+                        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+                    });
+                    products = r.products;
                     return products;
-                }
             }
         }
     }

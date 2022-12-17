@@ -16,9 +16,10 @@ namespace Exam.Classes
             serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
             serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
-            using (StreamWriter file = File.CreateText(@"C:\Users\data.json"))
+            using (StreamWriter sw = new StreamWriter(@"C:\Users\data.json"))
+            using (Newtonsoft.Json.JsonWriter writer = new Newtonsoft.Json.JsonTextWriter(sw))
             {
-                serializer.Serialize(file, r);
+                serializer.Serialize(writer, r, typeof(Reader));
             }
         }
     }
