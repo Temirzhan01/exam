@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 
 namespace Exam.Classes
 {
-    public abstract class State
+    public abstract class State // общий абстрактный класс для состоянии
     {
         public string Name { get; set; }
         public abstract string GetName(); // это для более удобного вывода
-        public abstract void RaisePrice(Product product, int n);
+        public abstract void RaisePrice(Product product, int n); // для новой цены
         public abstract void SetUp(Product product);
         public abstract void SetOff(Product product);
         public abstract void GiveToTheWinner(Product product);

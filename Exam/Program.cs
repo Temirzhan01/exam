@@ -4,7 +4,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        void Show(Reader r, Model m)
+        void Show(Reader r, Model m) // Метод для вывыода и в целом интерфейс
         {
             Console.WriteLine("#  |\t Продукт");
             foreach (Product product in r.products)
@@ -20,28 +20,35 @@ class Program
             switch (n)
             {
                 case 1:
-                    r.products[k - 1].SetUp();
-                    m.OverrideFile(r);
+                    r.products[k - 1].SetUp(); // метод на аукцион
+                    m.OverrideFile(r); // сохраняем
                     break;
                 case 2:
                     Console.WriteLine("Введите цену которую хотите выставить: ");
                     int p = Convert.ToInt32(Console.ReadLine());
-                    r.products[k - 1].RaisePrice(p);
+                    r.products[k - 1].RaisePrice(p); // обновляем цену
                     m.OverrideFile(r);
                     break;
                 case 3:
-                    r.products[k - 1].GiveToTheWinner();
+                    r.products[k - 1].GiveToTheWinner(); // отдаем победителю
                     m.OverrideFile(r);
                     break;
                 case 4:
-                    r.products[k - 1].SetOff();
+                    r.products[k - 1].SetOff(); // снимаем с аукциона
                     m.OverrideFile(r);
                     break;
             }
         }
-        Reader reader = new Reader();
-        Model model = new Model();
-        reader.GetProducts();
-        Show(reader, model);
+        Reader reader = new Reader(); // читает из файла
+        Model model = new Model(); // модель которая обновляет файл
+        reader.GetProducts(); // метод который вытаскивает продукты из файла или же из себя
+        int i = 1;
+        while (i != 0 ) // для бесконечного цикла 
+        {
+            Show(reader, model); // запускаем меню, типа можно до бесконечности смотреть и менять состояния товаров и т.д.
+            Console.WriteLine("1) Закрыть? \n2) Продолжить :");
+            string j = Console.ReadLine();
+            if (j == "1") { break; }
+        }
     }
 }

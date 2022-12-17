@@ -40,7 +40,7 @@ namespace Exam.Classes
             {
                 product.state = new SoldState();
                 Console.WriteLine("Продукт успешно передан победителю");
-                IStrategy strategy;
+                IStrategy strategy; // тут использую стратегию, чтобы в зависимости от цены, менять объект класса стратегии на другой, с другой реализацией
                 if (product.Price >= 1000)
                 {
                     strategy = new Gold();

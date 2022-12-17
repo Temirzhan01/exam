@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Exam.Classes
 {
-    interface IStrategy
+    interface IStrategy // стратегия для генерации в зависимости от цены
     {
         public string GetHonoraryCode(Product product);
     }

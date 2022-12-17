@@ -9,7 +9,7 @@ namespace Exam.Classes
 {
     public class Model
     {
-        public void OverrideFile(Reader r) 
+        public void OverrideFile(Reader r) // конфигурации ниже, нашел в инете. Для корректной десериализации
         {
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
             serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());

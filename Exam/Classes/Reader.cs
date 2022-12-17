@@ -20,15 +20,15 @@ namespace Exam.Classes
             {
                 return products;
             }
-            else
+            else // конфигурации ниже, нашел в инете. Для корректной десериализации
             {
-                    Reader r = Newtonsoft.Json.JsonConvert.DeserializeObject<Reader>(File.ReadAllText(@"C:\Users\data.json"), new Newtonsoft.Json.JsonSerializerSettings
-                    {
-                        TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-                        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-                    });
-                    products = r.products;
-                    return products;
+                Reader r = Newtonsoft.Json.JsonConvert.DeserializeObject<Reader>(File.ReadAllText(@"C:\Users\data.json"), new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+                    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+                });
+                products = r.products;
+                return products;
             }
         }
     }

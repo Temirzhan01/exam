@@ -20,7 +20,7 @@ namespace Exam.Classes
             this.Price = Price;
             this.state = state;
         }
-        public void RaisePrice(int n)
+        public void RaisePrice(int n) // в методах продукта, продукт передает самого себя, чтобы в объектах состояния поменять состояния продукта
         {
             this.state.RaisePrice(this, n);
         }

@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace Exam.Classes
 {
-    public class Generator 
+    public class Generator // готовый генератор, копи паст просто
     {
         public string CalculateMD5Hash(string input)
         {
