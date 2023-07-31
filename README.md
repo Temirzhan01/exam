@@ -1,6 +1,16 @@
-create or replace procedure delete_test_case(in_scheme_name text, test_case_number int)
-as $$
-begin
-	delete from autotest_test_case tc where tc.process_id = (select p.id from autotest_process p where p.scheme_name = in_scheme_name) and tc.case_number = case_number;
-end; $$
-language plpgsql
+private readonly IConsulClient _consulClient;
+        private readonly IConfiguration _configuration;
+        public FieldController(IConsulClient consulClient, IConfiguration configuration)
+        {
+            _consulClient = consulClient;
+            _configuration = configuration;
+        }
+
+        public ConnectionStringToBase config
+        {
+            get
+            {
+                var configData = Task.Run(async () => await _consulClient.KV.Get(_configuration["Environment:ConsulKvName"]));
+                return JsonConvert.DeserializeObject<ConnectionStringToBase>(configData.Result.Response.Value.toString());
+            }
+        }
