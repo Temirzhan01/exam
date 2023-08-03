@@ -13,6 +13,7 @@ namespace PostConsole
         static async Task Main(string[] args)
         {
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            string template = @"{ ""contractNumber"":[""KZ756010002013215255""], ""dateFrom"":""2022-05-21"", ""dateTo"":""2023-05-21"", ""onlyIncomes"": true }";
             string template = @"{
             'contractNumber':['KZ756010002013215255'],
             'dateFrom':'2022-05-21',
