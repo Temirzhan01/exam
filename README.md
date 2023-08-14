@@ -1,211 +1,66 @@
-CREATE OR REPLACE FUNCTION GET_PROCESSES_LIST() RETURNS SETOF AUTOTEST_PROCESS LANGUAGE 'PLPGSQL' AS $$
-BEGIN
-  RETURN QUERY SELECT * FROM AUTOTEST_PROCESS;
-END;
-$$;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using ConsoleApp;
+using System.IO;
+using System.Text;
 
-CREATE OR REPLACE PROCEDURE ADD_PROCESS(IN IN_SCHEME_NAME TEXT, IN IN_PROCESS_NAME TEXT, OUT OUT_RESULT TEXT) LANGUAGE 'PLPGSQL' AS $$
-BEGIN
-    INSERT INTO AUTOTEST_PROCESS (SCHEME_NAME, PROCESS_NAME) VALUES (IN_SCHEME_NAME, IN_PROCESS_NAME);
-    OUT_RESULT := 'Ok';
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        OUT_RESULT := 'UpdateError: ' || SUBSTR(SQLERRM, 1, 200);
-END;
-$$;
+namespace PostConsole
+{
+    class Program
+    {
+        static readonly HttpClient client = new HttpClient();
+        static async Task Main(string[] args)
+        {
+            string[] iins = File.ReadAllLines("C:/Users/00055864/source/repos/ConsoleApp/iin.txt");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            TemplateBody body = new TemplateBody()
+            {
+                contractNumbers = null,
+                dateFrom = "2022-05-21",
+                dateTo = "2023-05-21",
+                onlyIncomes = true
+            };
+            Accounts accounts = new Accounts();
+            foreach (string iin in iins) 
+            {
+                string jsonString = $"{{ \"iin\" : \"{iin}\" }}";
+                string acc = await GetAccount(client, new StringContent(jsonString, Encoding.UTF8, "application/json"));
+                accounts = JsonConvert.DeserializeObject<Accounts>(acc);
+                body.contractNumbers = accounts.targetNumbers;
+                await SendPostRequest(client, iin, new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json"));
+            }
+        }
 
-CREATE OR REPLACE FUNCTION GET_FIELD_LIST(IN_SCHEME_NAME TEXT) RETURNS SETOF AUTOTEST_FIELD LANGUAGE 'PLPGSQL' AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM AUTOTEST_FIELD WHERE AUTOTEST_FIELD.PROCESS_ID = (SELECT ID FROM AUTOTEST_PROCESS WHERE SCHEME_NAME = IN_SCHEME_NAME);
-END;
-$$;
+        static async Task<string> GetAccount (HttpClient client, StringContent iin)
+        {
+            try
+            {
+                var url = "http://halykbpm-dev-core.homebank.kz/card-transactions/get-accounts";
+                var response = await client.PostAsync(url, iin);
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException e)
+            {
+                return e.Message;
+            }
+        }
 
-CREATE OR REPLACE PROCEDURE ADD_FIELD(IN IN_SCHEME_NAME TEXT, IN FIELD TEXT, OUT OUT_RESULT TEXT) LANGUAGE 'PLPGSQL' AS $$
-BEGIN
-    INSERT INTO AUTOTEST_FIELD (PROCESS_ID, FIELD_NAME) VALUES ((SELECT ID FROM AUTOTEST_PROCESS WHERE SCHEME_NAME = IN_SCHEME_NAME), FIELD);
-    OUT_RESULT := 'Ok';
-
-EXCEPTION
-WHEN OTHERS THEN
-  ROLLBACK;
-  OUT_RESULT := 'UpdateError: ' || SUBSTR(SQLERRM, 1, 200);
-end; $$;
-
-CREATE OR REPLACE PROCEDURE PUBLIC.DELETE_FIELD(IN IN_SCHEME_NAME TEXT, IN IN_FIELD_NAME TEXT, OUT OUT_RESULT TEXT) LANGUAGE 'PLPGSQL' AS 
-DECLARE FIELDID INT; 
-BEGIN
-
-SELECT ID INTO FIELDID FROM AUTOTEST_FIELD
-WHERE ID = (
-   SELECT ID FROM AUTOTEST_FIELD  
-   WHERE PROCESS_ID=(
-	   SELECT P.ID FROM AUTOTEST_PROCESS P
-	   WHERE P.SCHEME_NAME = IN_SCHEME_NAME) 
-   AND FIELD_NAME = IN_FIELD_NAME);
-
-DELETE FROM AUTOTEST_FIELD_VALUE FV
-WHERE FV.FIELD_ID = FIELDID;
-
-DELETE FROM AUTOTEST_FIELD
-WHERE ID = FIELDID;
-   OUT_RESULT := 'Ok';
-
-EXCEPTION
-WHEN OTHERS THEN
-  ROLLBACK;
-  OUT_RESULT := 'UPDATEERROR: ' || SUBSTR(SQLERRM, 1, 200);
-END; 
-;
-
-CREATE OR REPLACE FUNCTION GET_TEST_CASE(IN_SCHEME_NAME TEXT) 
-RETURNS SETOF AUTOTEST_TEST_CASE 
-LANGUAGE 'plpgsql' 
-AS 
-$$ 
-BEGIN 
-    RETURN QUERY SELECT * FROM AUTOTEST_TEST_CASE WHERE AUTOTEST_TEST_CASE.PROCESS_ID = (SELECT ID FROM AUTOTEST_PROCESS WHERE SCHEME_NAME = IN_SCHEME_NAME); 
-END; 
-$$;
-
-CREATE OR REPLACE PROCEDURE ADD_TEST_CASE(IN IN_SCHEME_NAME TEXT, IN TEST_CASE_NUMBER INTEGER, IN DESCRIPTION TEXT, OUT OUT_RESULT TEXT) 
-LANGUAGE 'plpgsql' 
-AS 
-$$ 
-BEGIN 
-    INSERT INTO AUTOTEST_TEST_CASE (PROCESS_ID, CASE_NUMBER, DESCRIPTION) VALUES ((SELECT ID FROM AUTOTEST_PROCESS WHERE SCHEME_NAME = IN_SCHEME_NAME), TEST_CASE_NUMBER, DESCRIPTION); 
-    OUT_RESULT := 'Ok';
-
-    EXCEPTION
-    WHEN OTHERS THEN
-      ROLLBACK;
-      OUT_RESULT := 'UpdateError: ' || SUBSTR(SQLERRM, 1, 200);
-END; 
-$$;
-
-CREATE OR REPLACE PROCEDURE UPDATE_TEST_CASE_DESCRIPTION(IN IN_SCHEME_NAME TEXT, IN TEST_CASE_NUMBER INTEGER, IN IN_DESCRIPTION TEXT, OUT OUT_RESULT TEXT) 
-LANGUAGE 'plpgsql' 
-AS 
-$$ 
-DECLARE 
-    TEST_CASE_COUNT INTEGER; 
-BEGIN 
-    SELECT COUNT(AUTOTEST_TEST_CASE.ID) INTO TEST_CASE_COUNT 
-    FROM AUTOTEST_PROCESS, AUTOTEST_TEST_CASE 
-    WHERE AUTOTEST_PROCESS.SCHEME_NAME = IN_SCHEME_NAME 
-    AND AUTOTEST_TEST_CASE.PROCESS_ID = AUTOTEST_PROCESS.ID 
-    AND AUTOTEST_TEST_CASE.CASE_NUMBER = TEST_CASE_NUMBER;
-
-    IF TEST_CASE_COUNT = 1 THEN
-        UPDATE AUTOTEST_TEST_CASE
-        SET DESCRIPTION = IN_DESCRIPTION
-        WHERE AUTOTEST_TEST_CASE.PROCESS_ID =
-            (SELECT AUTOTEST_PROCESS.ID FROM  AUTOTEST_PROCESS
-             WHERE AUTOTEST_PROCESS.SCHEME_NAME = IN_SCHEME_NAME)
-        AND AUTOTEST_TEST_CASE.CASE_NUMBER = TEST_CASE_NUMBER;
-        OUT_RESULT := 'Ok';
-    ELSE
-        OUT_RESULT := 'UpdateError: found (' || TEST_CASE_COUNT || ') rows';
-    END IF;
-
-    EXCEPTION 
-    WHEN OTHERS THEN 
-        ROLLBACK; 
-        OUT_RESULT := 'UpdateError: ' || SUBSTR(SQLERRM, 1, 200);
-END; 
-$$;
-
-CREATE OR REPLACE PROCEDURE DELETE_TEST_CASE(IN IN_SCHEME_NAME TEXT, IN TEST_CASE_NUMBER INTEGER, OUT OUT_RESULT TEXT) 
-LANGUAGE 'plpgsql' 
-AS 
-$$ 
-BEGIN 
-    DELETE FROM AUTOTEST_TEST_CASE TC 
-    WHERE TC.PROCESS_ID = (SELECT P.ID FROM AUTOTEST_PROCESS P WHERE P.SCHEME_NAME = IN_SCHEME_NAME) 
-    AND TC.CASE_NUMBER = TEST_CASE_NUMBER; 
-    OUT_RESULT := 'Ok';
-
-    EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        OUT_RESULT := 'UpdateError: ' || SUBSTR(SQLERRM, 1, 200);
-END; 
-$$;
-
-CREATE OR REPLACE FUNCTION GET_TEST_CASE_DATA(IN_SCHEME_NAME TEXT, TEST_CASE_NUMBER INT) 
-RETURNS TABLE (FIELD_NAME TEXT, FIELD_VALUE TEXT) 
-AS 
-$$ 
-DECLARE 
-    CASE_ID INT; 
-BEGIN
-
-    SELECT TC.ID INTO CASE_ID 
-    FROM AUTOTEST_TEST_CASE TC, AUTOTEST_PROCESS P 
-    WHERE P.SCHEME_NAME = IN_SCHEME_NAME 
-    AND TC.PROCESS_ID = P.ID 
-    AND TC.CASE_NUMBER = TEST_CASE_NUMBER;
-
-    RETURN QUERY SELECT AF.FIELD_NAME, FV.FIELD_VALUE 
-    FROM AUTOTEST_PROCESS AP 
-    JOIN AUTOTEST_TEST_CASE TC ON AP.ID = TC.PROCESS_ID 
-    LEFT JOIN AUTOTEST_FIELD AF ON AP.ID = AF.PROCESS_ID 
-    LEFT JOIN AUTOTEST_FIELD_VALUE FV ON TC.ID = FV.TEST_CASE_ID AND AF.ID = FV.FIELD_ID 
-    WHERE AP.SCHEME_NAME = IN_SCHEME_NAME 
-    AND TC.ID = CASE_ID;
-
-END; 
-$$ 
-LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE PROCEDURE UPDATE_TEST_CASE_DATA(IN IN_PROCESS_NAME TEXT, IN IN_TEST_CASE_NUMBER INT, IN IN_FIELD_NAME TEXT, IN IN_FIELD_VALUE TEXT, OUT OUT_RESULT TEXT) 
-LANGUAGE 'plpgsql' 
-AS 
-$$ 
-DECLARE 
-    FIELD_ID_ INT; 
-    TEST_CASE_ID_ INT; 
-    CNT INT; 
-BEGIN 
-    SELECT TC.ID 
-    INTO TEST_CASE_ID_ 
-    FROM AUTOTEST_PROCESS P, AUTOTEST_TEST_CASE TC 
-    WHERE P.SCHEME_NAME = IN_PROCESS_NAME 
-    AND TC.PROCESS_ID = P.ID 
-    AND TC.CASE_NUMBER = IN_TEST_CASE_NUMBER;
-
-    SELECT F.ID
-    INTO FIELD_ID_
-    FROM AUTOTEST_TEST_CASE TC, AUTOTEST_FIELD F
-    WHERE TC.ID = TEST_CASE_ID_
-    AND TC.PROCESS_ID = F.PROCESS_ID
-    AND F.FIELD_NAME = IN_FIELD_NAME;
-
-    SELECT COUNT(1)
-    INTO CNT
-    FROM AUTOTEST_FIELD_VALUE FV
-    WHERE FV.TEST_CASE_ID = TEST_CASE_ID_
-    AND FV.FIELD_ID = FIELD_ID_;
-
-    IF CNT = 0 THEN
-        IF IN_FIELD_VALUE IS NOT NULL THEN
-            INSERT INTO AUTOTEST_FIELD_VALUE 
-            (TEST_CASE_ID, FIELD_ID, FIELD_VALUE)
-            VALUES
-            (TEST_CASE_ID_, FIELD_ID_, IN_FIELD_VALUE);
-        END IF;
-    ELSE
-        UPDATE AUTOTEST_FIELD_VALUE
-        SET FIELD_VALUE = IN_FIELD_VALUE
-        WHERE TEST_CASE_ID = TEST_CASE_ID_
-        AND FIELD_ID = FIELD_ID_;
-    END IF;
-
-    OUT_RESULT := 'Ok';
-    EXCEPTION 
-    WHEN OTHERS THEN 
-        ROLLBACK; 
-        OUT_RESULT := 'UpdateError: ' || SUBSTR(SQLERRM, 1, 200); 
-END; 
-$$ ;
-
+        static async Task SendPostRequest(HttpClient client, string iin, StringContent data)
+        {
+            try
+            {
+                var url = "https://halykbpm-dev-integration.halykbank.nb/way4-client-info-integration/contract/incomes";
+                var response = await client.PostAsync(url, data);
+                string result = await response.Content.ReadAsStringAsync();
+                File.WriteAllText("C:/Users/00055864/source/repos/ConsoleApp/results/" + iin + ".json", result);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught! Message :{0} ", e.Message);
+            }
+        }
+    }
+}
