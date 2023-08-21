@@ -1,1 +1,1 @@
-Could not load file or assembly 'System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+Attempt by method 'System.Web.Http.HttpConfiguration..ctor(System.Web.Http.HttpRouteCollection)' to access method 'System.Web.Http.HttpConfiguration.DefaultFormatters()' failed.
