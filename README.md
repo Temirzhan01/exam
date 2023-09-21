@@ -1,5 +1,1 @@
-"EPPlus": {
-    "ExcelPackage": {
-      "LicenseContext": "NonCommercial" //The license context used
-    }
-}
+"Exception: В документе XML (1, 2) присутствует ошибка.\nInnerException&lt;BaseMsbClient xmlns=&#39;&#39;&gt; не ожидался.\nStack Trace:    в System.Xml.Serialization.XmlSerializer.Deserialize(XmlReader xmlReader, String encodingStyle, XmlDeserializationEvents events)\r\n   в System.Xml.Serialization.XmlSerializer.Deserialize(TextReader textReader)\r\n   в MBP.Infrastructure.Repository.MsbClientRepository.Read(String ReqNumber) в D:\\source\\Workspaces\\Workspace\\SPMMediumSmallBusiness\\MBPCPR\\PROD-era\\MBP\\MBP\\Infrastructure\\Repository\\MsbClientRepository.cs:строка 215"
