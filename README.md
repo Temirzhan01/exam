@@ -1,22 +1,20 @@
-        public async Task<string> ChangeStatus(string reqNumber, int status)
+        public HttpClient _client 
         {
-            try
+            get 
             {
-                TaskData taskData = await GetTaskData(reqNumber);
-                var client = _httpClientFactory.CreateClient();
-                client.BaseAddress = new Uri(config.Ensemble);
-                var intermediate = JsonConvert.DeserializeObject<TaskModel>(taskData.taskModel);
-                intermediate.status = status;
-                taskData.taskModel = JsonConvert.SerializeObject(intermediate);
-                var body = JsonConvert.SerializeObject(taskData);
-                using (HttpResponseMessage response = await client.SendAsync( new HttpRequestMessage(HttpMethod.Post, $"finish/task") { Content = new StringContent(body, Encoding.UTF8, "application/json") }))
+                var httpClientHandler = new HttpClientHandler()
                 {
-                    response.EnsureSuccessStatusCode();
-                    return response.Content.ReadAsStringAsync().Result;
+                    Proxy = new WebProxy(),
+                    UseDefaultCredentials = true
+                };
+                HttpClient client = new HttpClient(httpClientHandler);
+                client.MaxResponseContentBufferSize = int.MaxValue;
+                var request = new HttpRequestMessage(new HttpMethod("GET"), "https://halykbpm-auth.halykbank.nb/win-Auth/jwt/bearer?clientId=bp-api");
+                var result = client.SendAsync(request).Result;
+                if (result.IsSuccessStatusCode) 
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Content.ReadAsStringAsync().Result.ToString());
                 }
-            }
-            catch (Exception e)
-            {
-                throw new HttpRequestException(e.Message);
+                return client;
             }
         }
