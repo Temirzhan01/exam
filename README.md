@@ -1,8 +1,11 @@
-        public object Deserialize(Type type, string loginFolder, string RequestNumber)
-        {
-            XmlSerializer serializer = new XmlSerializer(type);
-            StreamReader reader = new StreamReader(@"C:/myDataSource/MSB/Front/" + loginFolder + "/" + RequestNumber + "/BaseViewModel.xml");
-            object _object = serializer.Deserialize(reader.BaseStream);
-            reader.Close();
-            return _object;
-        }
+    function getToken() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: 'https://halykbpm-auth.halykbank.nb/win-Auth/jwt/bearer?clientId=bp-api',
+                type: 'GET',
+            },
+                success: function (response) {
+                    resolve(response)
+                }
+        );
+    });
