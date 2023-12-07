@@ -1,38 +1,26 @@
-const { get } = require("jquery");
-тут ругается также, проверь корректен ли нижний код 
+  SearchClientDataBlock(client: UBG.ClientModel, role: string) {
+    const { onlineBankData } = this.state;
+    return (
+      <div>
+        <Col sm={4} className={!client.searchText && 'form-group has-error'}>
+          <FormControl
+            type="text"
+            onChange={(e: any) => this.handleOnChange({ searchText: e.target.value }, role)}
+            value={client.searchText || ''}
+            disabled={false}
+          />
+        </Col>
+        <Col sm={1}>
+          <FormGroup>
+            {
+              role == 'auth' && this.renderButtonIfExists('SearchAuth', {
+                className: 'btn btn-default btn-block'
+              })
+            }
+          </FormGroup>
+        </Col>
+      </div>
+    );
+  }
 
-    function getToken() {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: 'https://halykbpm-auth.halykbank.nb/win-Auth/jwt/bearer?clientId=bp-api',
-                type: 'GET',
-                success: function (response) {
-                    resolve(response); // При успешном ответе разрешаем промис с ответом
-                },
-                error: function (xhr, status, error) {
-                    reject(error); // При ошибке отклоняем промис с ошибкой
-                }
-            });
-        });
-    }
-
-    $(document).on("click", ".SearchClientInfo", function () {
-        var data = new Object();
-        data.value = $(document).find(".IINBIN").val();
-
-        var $checkboxes = $('#GesvObjects input[type="checkbox"]');
-        var countCheckedCheckboxes = $checkboxes.filter(':checked').filter('.isCommisNeeded').length;
-
-        getToken().then(token => {
-            data.token = token;
-            $.get("/" + base_url + "/Base/SearchClientInfo", data, function (partial) {
-                if (countCheckedCheckboxes > 0) {
-                    $('#comisAccBlock').block({
-                        message: "<h3 style='color:red'>Нажмите кнопку Обновить</h3>"
-                    });
-                }
-
-                $(document).find("#StartData").html(partial);
-            });
-        });
-    });
+  Смотри у меня есть компонент поле, если в это поле вводят значение 000000000000 или оно содержит его то, нужно чтобы кнопка стало не активной
