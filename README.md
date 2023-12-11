@@ -1,90 +1,115 @@
-using Consul;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using SPMUtils;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http;
+using CLASB.Models;
+using System.Net;
+using Newtonsoft.Json;
 using System.Text;
-using System.Threading.Tasks;
-using TcrService3In1.Models;
-using TcrService3In1.ServiceReference;
+using System.Web.Services;
 
-namespace TcrService3In1.Services
+namespace MSBWS
 {
-    public class TcrService : ITcrService
+    public partial class MBWS
     {
-        private readonly IConsulClient _consulClient;
-        private readonly SoapService _soapService;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<TcrService> _logger;
-
-        public EnsembleServiceUrl config
+        [WebMethod(Description = "ЦАЗ выдача, по заявка с ОБ")]
+        public string CamundaOBRequest(string type, string body)
         {
-            get
+            _logger.Info($"Request type: {type}, request body: {body}");
+            try
             {
-                var configData = Task.Run(async () => await _consulClient.KV.Get("TcrEnsembleServices"));
-                return JsonConvert.DeserializeObject<EnsembleServiceUrl>(configData.Result.Response.Value.toString());
+                if (!string.IsNullOrEmpty(type))
+                {
+                    switch (type)
+                    {
+                        case "GET":
+                            return JsonConvert.SerializeObject(GetCamundaOBId(body));
+                        case "POST":
+                            CamundaOBIdStatus camundaOBIdStatus = JsonConvert.DeserializeObject<CamundaOBIdStatus>(body);
+                            return JsonConvert.SerializeObject(PostCamundaObStatus(camundaOBIdStatus));
+                        case "EXIST":
+                            return ProcExistInOb(body);
+                        default:
+                            throw new HttpRequestException("Not valid parameter type");
+                    }
+                }
+                throw new NullReferenceException("Null parameter type");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Exception: {ex}");
+                throw;
             }
         }
 
-        public TcrService(IConsulClient consulClient, IHttpClientFactory httpClientFactory, ILogger<TcrService> logger)
+        public CamundaOBId GetCamundaOBId(string bin)
         {
-            _consulClient = consulClient;
-            _httpClientFactory = httpClientFactory;
-            _soapService = new SoapService(config.TcrService, 1000);
-            _logger = logger;
-        }
-
-        public async Task<TaskModel> GetInfo(string transactionCode)
-        {
-            string reqNumber = (await _soapService.SearchForTransaction(transactionCode)).RequestNumber;
-            if (!string.IsNullOrEmpty(reqNumber))
+            try
             {
-                _logger.LogInformation($"Request number: {reqNumber}");
-                return JsonConvert.DeserializeObject<TaskModel>((await GetTaskData(reqNumber)).taskModel);
+                var response = HttpClientService._client.GetAsync($"/proclist?bin={bin}");
+                response.Result.EnsureSuccessStatusCode();
+                string strResponse = response.Result.Content.ReadAsStringAsync().Result.ToString();
+                if (!string.IsNullOrEmpty(strResponse) && strResponse != "null")
+                {
+                    List<CamundaOBId> result = JsonConvert.DeserializeObject<List<CamundaOBId>>(strResponse);
+                    return result[0];
+                }
+                throw new HttpRequestException();
             }
-            else
+            catch
             {
-                throw new HttpRequestException("Null request number");
+                throw;
             }
         }
 
-        public async Task<TaskData> GetTaskData(string reqNumber)
+        public CamundaOBResult PostCamundaObStatus(CamundaOBIdStatus camundaOBIdStatus)
         {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(config.Ensemble);
-            using (var response = await client.GetAsync($"get/task/{reqNumber}"))
+            try
             {
-                response.EnsureSuccessStatusCode();
-                return JsonConvert.DeserializeObject<TaskData>(await response.Content.ReadAsStringAsync());
+                var response = HttpClientService._client.PostAsync("/setCAZstatus", new StringContent(JsonConvert.SerializeObject(camundaOBIdStatus), Encoding.UTF8, "application/json"));
+                response.Result.EnsureSuccessStatusCode();
+                CamundaOBResult result = JsonConvert.DeserializeObject<CamundaOBResult>(response.Result.Content.ReadAsStringAsync().Result.ToString());
+                if (result.code != "0")
+                {
+                    throw new Exception(result.message);
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
 
-        public async Task<string> ChangeStatus(string transactionCode, int status)
+        public string ProcExistInOb(string bin)
         {
-            var result = await _soapService.GetTransactionInformation(transactionCode);
-            _logger.LogInformation($"Request number: {result.RequestNumber}/Transaction type: {result.TransType}");
-
-            Case OurCase = config.Cases[result.TransType];
-            TaskData taskData = await GetTaskData(result.RequestNumber);
-            var intermediate = JsonConvert.DeserializeObject<TaskModel>(taskData.taskModel);
-            intermediate.status = status;
-            taskData.taskModel = JsonConvert.SerializeObject(intermediate);
-            taskData.bpRoleCode = OurCase.role;
-            taskData.bpVersionId = OurCase.version;
-            taskData.resultActionCode = OurCase.action;
-            var body = JsonConvert.SerializeObject(taskData);
-            _logger.LogInformation($"Model: {body}");
-
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(config.Ensemble);
-            using (HttpResponseMessage response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Post, $"finish/task") { Content = new StringContent(body, Encoding.UTF8, "application/json") }))
+            try
             {
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsStringAsync();
+                var response = HttpClientService._client.GetAsync($"/procExistInOb?bin={bin}");
+                response.Result.EnsureSuccessStatusCode();
+                return response.Result.Content.ReadAsStringAsync().Result;
             }
-
+            catch
+            {
+                throw;
+            }
+        }
+    }
+    public static class HttpClientService
+    {
+        public static readonly HttpClient _client;
+        static HttpClientService()
+        {
+            var handler = new HttpClientHandler()
+            {
+                Proxy = new WebProxy(),
+                UseDefaultCredentials = true
+            };
+            _client = new HttpClient(handler) { MaxResponseContentBufferSize = int.MaxValue, BaseAddress = new Uri(ConfigurationManager.AppSettings["CamundaOnlineBank"]) };
         }
     }
 }
+
