@@ -1,55 +1,107 @@
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Net.Http;
+using CLASB.Models;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Text;
+using System.Web.Services;
 
-public class ExceptionMiddleware
+namespace MSBWS
 {
-    private readonly RequestDelegate _next;
-
-    public ExceptionMiddleware(RequestDelegate next)
+    public static class HttpClientService
     {
-        _next = next;
-    }
-
-    public async Task InvokeAsync(HttpContext httpContext)
-    {
-        try
+        public static readonly HttpClient _client;
+        static HttpClientService()
         {
-            await _next(httpContext);
-        }
-        catch (Exception ex)
-        {
-            await HandleExceptionAsync(httpContext, ex);
+            var handler = new HttpClientHandler()
+            {
+                Proxy = new WebProxy(),
+                UseDefaultCredentials = true
+            };
+            _client = new HttpClient(handler) { MaxResponseContentBufferSize = int.MaxValue };
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    public partial class MBWS
     {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        [WebMethod(Description = "ЦАЗ выдача, по заявка с ОБ")]
+        public string CamundaOBRequest(string type, string body)
+        {
+            _logger.Info($"Request type: {type}, request body: {body}");
+            try
+            {
+                if (!string.IsNullOrEmpty(type))
+                {
+                    switch (type)
+                    {
+                        case "GET":
+                            return JsonConvert.SerializeObject(GetCamundaOBId(body));
+                        case "POST":
+                            CamundaOBIdStatus camundaOBIdStatus = JsonConvert.DeserializeObject<CamundaOBIdStatus>(body);
+                            return JsonConvert.SerializeObject(PostCamundaObStatus(camundaOBIdStatus));
+                        default:
+                            throw new HttpRequestException("Not valid parameter type");
+                    }
+                }
+                throw new NullReferenceException("Null parameter type");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Exception: {ex.Message}");
+                throw new Exception(ex.Message);
+            }
+        }
 
-        var result = JsonConvert.SerializeObject(new { error = exception.Message });
-        return context.Response.WriteAsync(result);
+        public CamundaOBId GetCamundaOBId(string bin)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(new HttpMethod("GET"), ConfigurationManager.AppSettings["CamundaOnlineBank"] + "/proclist?bin=" + bin);
+                HttpClient _client = HttpClientService._client;
+                var response = _client.SendAsync(request);
+                response.Result.EnsureSuccessStatusCode();
+                string strResponse = response.Result.Content.ReadAsStringAsync().Result.ToString();
+                if (!string.IsNullOrEmpty(strResponse) && strResponse != "null")
+                {
+                    List<CamundaOBId> result = JsonConvert.DeserializeObject<List<CamundaOBId>>(strResponse);
+                    return result[0];
+                }
+                throw new HttpRequestException();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public CamundaOBResult PostCamundaObStatus(CamundaOBIdStatus camundaOBIdStatus)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(new HttpMethod("POST"), ConfigurationManager.AppSettings["CamundaOnlineBank"] + "/setCAZstatus")
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(camundaOBIdStatus), Encoding.UTF8, "application/json")
+                };
+                HttpClient _client = HttpClientService._client;
+                var response = _client.SendAsync(request);
+                response.Result.EnsureSuccessStatusCode();
+                CamundaOBResult result = JsonConvert.DeserializeObject<CamundaOBResult>(response.Result.Content.ReadAsStringAsync().Result.ToString());
+                if (result.code != "0")
+                {
+                    throw new Exception(result.message);
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
-    app.UseMiddleware<ExceptionMiddleware>();
-public async Task<ActionResult<IEnumerable<ErrorRequest>>> GetAllErrorRequests(string fromDate, string toDate)
-{
-    // Логирование запроса
-    _logger.LogInformation($"FromDate: {fromDate} || Todate: {toDate}");
-
-    // Проверка входных параметров на null или пустоту
-    if (string.IsNullOrEmpty(fromDate) || string.IsNullOrEmpty(toDate))
-    {
-        // Возвращаем ошибку клиенту
-        return BadRequest("From date and to date must be provided.");
-    }
-
-    // Получение данных
-    var errorRequests = await _service.GetAllErrorRequests(fromDate, toDate);
-
-    // Возвращаем результат
-    return Ok(errorRequests);
-}
+.NET FRAMEWORK 4.6.1 
