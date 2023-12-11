@@ -46,7 +46,9 @@ namespace MSBWS
         {
             try
             {
-                var response = HttpClientService._client.GetAsync($"/proclist?bin={bin}");
+                var request = new HttpRequestMessage(new HttpMethod("GET"), ConfigurationManager.AppSettings["CamundaOnlineBank"] + "/proclist?bin=" + bin);
+                HttpClient _client = HttpClientService._client;
+                var response = _client.SendAsync(request);
                 response.Result.EnsureSuccessStatusCode();
                 string strResponse = response.Result.Content.ReadAsStringAsync().Result.ToString();
                 if (!string.IsNullOrEmpty(strResponse) && strResponse != "null")
@@ -66,7 +68,12 @@ namespace MSBWS
         {
             try
             {
-                var response = HttpClientService._client.PostAsync("/setCAZstatus", new StringContent(JsonConvert.SerializeObject(camundaOBIdStatus), Encoding.UTF8, "application/json"));
+                var request = new HttpRequestMessage(new HttpMethod("POST"), ConfigurationManager.AppSettings["CamundaOnlineBank"] + "/setCAZstatus")
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(camundaOBIdStatus), Encoding.UTF8, "application/json")
+                };
+                HttpClient _client = HttpClientService._client;
+                var response = _client.SendAsync(request);
                 response.Result.EnsureSuccessStatusCode();
                 CamundaOBResult result = JsonConvert.DeserializeObject<CamundaOBResult>(response.Result.Content.ReadAsStringAsync().Result.ToString());
                 if (result.code != "0")
@@ -88,8 +95,10 @@ namespace MSBWS
         {
             try
             {
-                var response = HttpClientService._client.GetAsync($"/procExistInOb?bin={bin}");
-                response.Result.EnsureSuccessStatusCode();
+                var request = new HttpRequestMessage(new HttpMethod("GET"), ConfigurationManager.AppSettings["CamundaOnlineBank"] + "/procExistInOb?bin=" + bin);
+                var a = $"{HttpClientService._client.BaseAddress}/procExistInOb?bin={bin}";
+                HttpClient _client = HttpClientService._client;
+                var response = _client.SendAsync(request);
                 return response.Result.Content.ReadAsStringAsync().Result;
             }
             catch
@@ -97,19 +106,19 @@ namespace MSBWS
                 throw;
             }
         }
-    }
-    public static class HttpClientService
-    {
-        public static readonly HttpClient _client;
-        static HttpClientService()
-        {
-            var handler = new HttpClientHandler()
-            {
-                Proxy = new WebProxy(),
-                UseDefaultCredentials = true
-            };
-            _client = new HttpClient(handler) { MaxResponseContentBufferSize = int.MaxValue, BaseAddress = new Uri(ConfigurationManager.AppSettings["CamundaOnlineBank"]) };
-        }
+
     }
 }
-
+public static class HttpClientService
+{
+    public static readonly HttpClient _client;
+    static HttpClientService()
+    {
+        var handler = new HttpClientHandler()
+        {
+            Proxy = new WebProxy(),
+            UseDefaultCredentials = true
+        };
+        _client = new HttpClient(handler) { MaxResponseContentBufferSize = int.MaxValue };
+    }
+}
