@@ -2,7 +2,7 @@
             $.get(urlBase + "CheckService/IsCommissionDocExist", data, function (result)
             {
                 alert(result)
-            });
+            }); этот запрос не отправляется, не входит в тот метод.
 
                     public Tuple<bool, string> IsCommissionDocExist(bool isChecked)
         {
