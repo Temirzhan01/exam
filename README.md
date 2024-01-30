@@ -1,21 +1,13 @@
-public class AuthorityService
-{
-    private readonly AuthorityRepository _repository;
+опытка скачать метаданные из "http://172.16.143.40:57772/csp/hddmain/Service.GetFinToolDocsMSB.cls?wsdl" с помощью службы обмена метаданными WS-Metadata Exchange и HttpGet.
+Ошибка: Не удается получить метаданные из http://172.16.143.40:57772/csp/hddmain/Service.GetFinToolDocsMSB.cls?wsdl
 
-    public AuthorityService(AuthorityRepository repository)
-    {
-        _repository = repository;
-    }
+Если у вас есть доступ к службе Windows (R) Communication Foundation, убедитесь, что включена публикация метаданных по указанному адресу. Справочные сведения по включению публикации метаданных см. в документации MSDN по адресу http://go.microsoft.com/fwlink/?LinkId=65455.
+Ошибка службы обмена метаданными WS-Metadata Exchange
+    Идентификатор URI: http://172.16.143.40:57772/csp/hddmain/Service.GetFinToolDocsMSB.cls?wsdl
 
-    public async Task<List<Authority>> GetFilteredAuthoritiesAsync(string branchCode)
-    {
-        var authorities = await _repository.GetAuthoritiesAsync();
 
-        return authorities.Where(a => 
-            (branchCode == "DRKK1" || branchCode == "DRKK2" || branchCode == "DRKK3" 
-             ? EF.Functions.Like(a.BranchCode, branchCode.Substring(0, 4) + "%") || a.BranchCode == "DKA" || a.BranchCode == "ZPP" 
-             : a.BranchCode == branchCode)
-            && DateTime.Now.Date < a.Validity.AddDays(1)
-        ).ToList();
-    }
-}
+Метаданные содержат ссылку, которую невозможно разрешить: "http://172.16.143.40:57772/csp/hddmain/Service.GetFinToolDocsMSB.cls?wsdl".
+The remote server returned an error: (403) Forbidden.
+
+Для получения дополнительных сведений введите "dotnet-svcutil -h".
+PS D:\source\repos\CustomServices\SPM3.0Service>
