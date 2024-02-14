@@ -19,7 +19,7 @@ type Content struct {
 }
 
 func main() {
-	resp, err := http.Get("urlHere")
+	resp, err := http.Get("https://kompra.kz/api/v2/taxes?identifier=140241009172&api-token=test_API_v2")
 	if err != nil {
 		log.Fatalf("Cant create request: %v", err)
 	}
@@ -29,6 +29,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Can't read response: %v", err)
 	}
+
 	var respBody Taxes
 	if err := json.Unmarshal(body, respBody); err != nil {
 		log.Fatalf("Can't unmarshal response body: %v", err)
@@ -38,6 +39,5 @@ func main() {
 }
 
 
-Cant create request: Get "urlHere": dial tcp 94.247.131.230:443: connectex: A connection attempt failed because the connected party did not
- properly respond after a period of time, or established connection failed because connected host has failed to respond.
+Can't unmarshal response body: json: Unmarshal(non-pointer main.Taxes)
 exit status 1
