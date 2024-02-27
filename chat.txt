@@ -1,3 +1,119 @@
+package main
+
+import (
+	"fmt"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/app"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/config"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/docs"
+	"os"
+)
+
+func main() {
+	configs := config.New("config.json")
+	if os.Getenv("APP_MODE") == "development" {
+		docs.SwaggerInfo.Host = fmt.Sprintf("localhost:%d", configs.ServerPort)
+	}
+	app.Start(configs)
+}
+
+
+package app
+
+import (
+	"fmt"
+	"net"
+	"net/http"
+	"time"
+
+	"halykbpm-git.homebank.kz/business-processes/compraIP/config"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/handler"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/repository/taxes"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/router"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/service"
+	"halykbpm-git.homebank.kz/business-processes/compraIP/util/logger"
+)
+
+//Start ...
+func Start(config *config.Config) {
+	log := logger.NewLogger(config.ESURL, config.LogLevel)
+
+	tout := time.Duration(config.ServiceTimeoutSeconds) * time.Second
+	var client *http.Client
+	var defaultTransport http.RoundTripper = &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   10 * time.Second,
+			KeepAlive: 10 * time.Second,
+			DualStack: true,
+		}).DialContext,
+		ForceAttemptHTTP2:     true,
+		MaxIdleConns:          200,
+		MaxIdleConnsPerHost:   100,
+		IdleConnTimeout:       30 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+		MaxConnsPerHost:       30,
+	}
+	if config.LogServiceRequests && !config.ReleaseMode {
+		client = &http.Client{
+			Transport: logger.NewLoggedRoundTripper(http.DefaultTransport, logger.NewDefaultLogger()),
+			Timeout:   tout,
+		}
+	} else {
+		client = &http.Client{
+			Transport: defaultTransport,
+			Timeout:   tout,
+		}
+	}
+
+	store := taxes.New(service.NewCompraService(log, config, service.WithHTTPClient(client)))
+
+	h := handler.NewHandler(store, config, log)
+	r := router.InitRouter(h, config.ReleaseMode)
+
+	log.Info("compraIP", "START", "Starting", "", "", "", "", nil)
+	if err := r.Run(fmt.Sprintf(":%d", config.ServerPort)); err != nil {
+		log.Fatal("compraIP", "START", -1, "Failed start server", "", "", "", "", nil)
+	}
+}
+
+
+package config
+
+import (
+	"github.com/spf13/viper"
+	"log"
+)
+
+// Config ...
+type Config struct {
+	ServerPort            int    `json:"serverPort"`
+	ReleaseMode           bool   `json:"releaseMode"`
+	ServiceTimeoutSeconds int    `json:"serviceTimeoutSeconds"`
+	LogLevel              string `json:"logLevel"`
+	LogServiceRequests    bool   `json:"logServiceRequests"`
+	CompraUrl             string `json:"compraUrl"`
+	ESURL                 string `json:"ESURL"`
+	CompraAuthToken       string `json:"compraAuthToken"`
+}
+
+func New(path string) *Config {
+	viper.SetConfigFile(path)
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Error reading config file, %s", err)
+	}
+
+	var config Config
+	if err := viper.Unmarshal(&config); err != nil {
+		log.Fatalf("Unable to decode into struct, %v", err)
+	}
+
+	return &config
+}
+
+
 package router
 
 import (
@@ -16,323 +132,12 @@ func InitRouter(h *handler.Handler, production bool) *gin.Engine {
 		gin.DefaultWriter = ioutil.Discard
 	}
 	r := gin.Default()
-	r.GET("/")
 	if !production {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
-	r.GET("/getTaxes", h.GetTaxes)
+	r.GET("/getTaxes", h.CheckIP)
+	r.GET("/getTaxes", h.GetCheckResults)
 	r.GET("/healthz")
 
 	return r
-}
-
-
-package handler
-
-import (
-	"github.com/gin-gonic/gin"
-	log "halykbpm-git.homebank.kz/HomeBank/elastic-logger.v3"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/config"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/render"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/repository"
-	"net/http"
-	"net/http/httputil"
-	"strings"
-)
-
-type resourcePaths struct {
-	Value string `uri:"value" binding:"required"`
-	Param string `uri:"param" binding:"required"`
-}
-
-//Handler ...
-type Handler struct {
-	store  repository.Store
-	config *config.Config
-	logger log.Logger
-}
-
-//NewHandler ...
-func NewHandler(store repository.Store, config *config.Config, logger log.Logger) *Handler {
-	return &Handler{
-		store:  store,
-		config: config,
-		logger: logger,
-	}
-}
-
-func (h *Handler) needXML(c *gin.Context) bool {
-	accept := c.Request.Header.Get("Accept")
-	return strings.Contains(accept, "/xml")
-}
-
-func (h *Handler) ok(c *gin.Context, resp interface{}, fields ...string) {
-	if h.needXML(c) {
-		c.XML(http.StatusOK, &resp)
-	} else {
-		if len(fields) > 0 && fields[0] != "" {
-			c.Render(http.StatusOK, render.JSON{Data: resp, Fields: fields[0]})
-		} else {
-			c.JSON(http.StatusOK, &resp)
-		}
-	}
-}
-
-func (h *Handler) fail(c *gin.Context, status int, err error) {
-	buf, _ := httputil.DumpRequest(c.Request, true)
-	h.logger.Error("compraIP", "Error handler", status, err.Error(), "", "", "", string(buf), nil)
-	if h.needXML(c) {
-		c.XML(status, &model.ErrorMessage{
-			Code:    -1,
-			Message: err.Error(),
-		})
-	} else {
-		c.JSON(status, &model.ErrorMessage{
-			Code:    -1,
-			Message: err.Error(),
-		})
-	}
-}
-
-func (h *Handler) success(c *gin.Context, resp interface{}, fields ...string) {
-	if len(fields) > 0 && fields[0] != "" {
-		c.Render(http.StatusOK, render.JSON{Data: resp, Fields: fields[0]})
-	} else {
-		c.JSON(http.StatusOK, &resp)
-	}
-}
-
-
-package handler
-
-import (
-	"context"
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/util"
-	"net/http"
-)
-
-func (h *Handler) GetTaxes(c *gin.Context) {
-	var paths resourcePaths
-	if err := c.ShouldBindUri(&paths); err != nil {
-		h.fail(c, http.StatusBadRequest, err)
-		return
-	}
-
-	var req model.Client
-	ok := util.BindRequest(&req, paths.Param, paths.Value)
-	if !ok {
-		h.fail(c, http.StatusBadRequest, fmt.Errorf("Invalid path param %s", paths.Param))
-		return
-	}
-
-	resp, err := h.store.TaxesRepo().GetTaxes(context.Background(), &req)
-	if err != nil {
-		h.fail(c, http.StatusUnprocessableEntity, err)
-		return
-	}
-
-	h.ok(c, &resp)
-}
-
-
-package repository
-
-// Store ...
-type Store interface {
-	TaxesRepo() TaxesRepository
-}
-
-package repository
-
-import (
-	"context"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-)
-
-// TaxesRepository ...
-type TaxesRepository interface {
-	GetTaxes(ctx context.Context, req *model.Client) (*model.Taxes, error)
-}
-
-package taxes
-
-import (
-	"halykbpm-git.homebank.kz/business-processes/compraIP/repository"
-	rest "halykbpm-git.homebank.kz/business-processes/compraIP/service"
-)
-
-// Store ...
-type Store struct {
-	service   rest.Service
-	taxesRepo *TaxesRepo
-}
-
-// New ...
-func New(restService rest.Service) *Store {
-	return &Store{
-		service: restService,
-	}
-}
-
-// Service ...
-func (s *Store) TaxesRepo() repository.TaxesRepository {
-	if s.taxesRepo != nil {
-		return s.taxesRepo
-	}
-
-	s.taxesRepo = &TaxesRepo{
-		store: s,
-	}
-
-	return s.taxesRepo
-}
-
-package taxes
-
-import (
-	"context"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-)
-
-type TaxesRepo struct {
-	store *Store
-}
-
-func (r *TaxesRepo) GetTaxes(ctx context.Context, req *model.Client) (*model.Taxes, error) {
-	resp, err := r.store.service.GetTaxes(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-package service
-
-import (
-	"context"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-)
-
-type Service interface {
-	GetTaxes(ctx context.Context, req *model.Client) (*model.Taxes, error)
-}
-
-package service
-
-import (
-	"context"
-	"encoding/json"
-	"github.com/pkg/errors"
-	logger "halykbpm-git.homebank.kz/HomeBank/elastic-logger.v3"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/config"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-	"io"
-	"io/ioutil"
-	"net"
-	"net/http"
-	"net/url"
-	"path"
-	"time"
-)
-
-type options struct {
-	timeout time.Duration
-	client  HTTPClient
-}
-
-var defaultOptions = options{
-	timeout: time.Duration(55 * time.Second),
-}
-
-type Option func(*options)
-
-func WithHTTPClient(c HTTPClient) Option {
-	return func(o *options) {
-		o.client = c
-	}
-}
-
-type CompraService struct {
-	opts *options
-	log  logger.Logger
-	conf *config.Config
-}
-
-type HTTPClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
-
-func NewCompraService(log logger.Logger, cfg *config.Config, opt ...Option) *CompraService {
-	opts := defaultOptions
-	for _, o := range opt {
-		o(&opts)
-	}
-	return &CompraService{
-		opts: &opts,
-		log:  log,
-		conf: cfg,
-	}
-}
-
-func (c *CompraService) GetTaxes(ctx context.Context, req *model.Client) (*model.Taxes, error) {
-
-	action := "GetTaxes"
-	u, err := url.Parse(c.conf.CompraUrl)
-	u.Path = path.Join(u.Path, "/taxes?identifier=", req.IinBIN, "&api-token=", c.conf.CompraAuthToken)
-	qs := u.Query()
-	u.RawQuery = qs.Encode()
-	res, err := c.newRequest(ctx, "GET", u.String(), nil)
-	if err != nil {
-		return nil, errors.Wrapf(err, action)
-	}
-	defer res.Body.Close()
-
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, errors.Wrapf(err, action)
-	}
-
-	var respBody *model.Taxes
-	if err := json.Unmarshal(body, &respBody); err != nil {
-		return nil, c.getError(err, action, u.String(), body)
-	}
-
-	return respBody, nil
-}
-
-func (c *CompraService) newRequest(ctx context.Context, method, _url string, body io.Reader) (*http.Response, error) {
-	req, err := http.NewRequest(method, _url, body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("content-type", "application/json")
-	req = req.WithContext(ctx)
-
-	client := c.opts.client
-	if client == nil {
-		tr := &http.Transport{
-			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
-				d := net.Dialer{Timeout: 55 * time.Second}
-				return d.DialContext(ctx, network, addr)
-			},
-		}
-		client = &http.Client{Timeout: 55 * time.Second, Transport: tr}
-	}
-
-	return client.Do(req)
-}
-
-func (c *CompraService) getError(err error, action, path string, body []byte) error {
-	var fail model.FailMessage
-	errf := json.Unmarshal(body, &fail)
-	if errf != nil {
-		c.log.Error("compra.integration", action, -1, "Parse Response Error", path, "", "", string(body), nil)
-		return err
-	}
-	return model.NewAPIError(fail.RetCode, fail.RetMsg)
 }
