@@ -1,0 +1,40 @@
+require (
+    github.com/spf13/viper v1.8.1
+)
+
+package config
+
+import (
+    "github.com/spf13/viper"
+    "log"
+)
+
+// Config структура теперь будет содержать только поля
+type Config struct {
+    ServerPort            int
+    ReleaseMode           bool
+    ServiceTimeoutSeconds int
+    LogLevel              string
+    LogServiceRequests    bool
+    CompraUrl             string
+    ESURL                 string
+    CompraAuthToken       string
+}
+
+// New функция для инициализации конфигурации
+func New(path string) *Config {
+    viper.SetConfigFile(path)
+    viper.AutomaticEnv() // Автоматически переопределит значения из переменных окружения
+
+    // Чтение файла конфигурации
+    if err := viper.ReadInConfig(); err != nil {
+        log.Fatalf("Error reading config file, %s", err)
+    }
+
+    var config Config
+    if err := viper.Unmarshal(&config); err != nil {
+        log.Fatalf("Unable to decode into struct, %v", err)
+    }
+
+    return &config
+}
