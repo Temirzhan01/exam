@@ -2,23 +2,6 @@ package service
 
 import (
 	"context"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-)
-
-type Service interface {
-	CheckIP(client string) (string, error)
-	GetResults(refer string) ([]*model.Row, error)
-}
-
-type Integration interface {
-	GetTaxes(ctx context.Context, req *model.Client) (*model.Taxes, error)
-}
-
-
-package service
-
-import (
-	"context"
 	"encoding/json"
 	"github.com/pkg/errors"
 	logger "halykbpm-git.homebank.kz/HomeBank/elastic-logger.v3"
@@ -129,28 +112,4 @@ func (is *IntegraionService) getError(err error, action, path string, body []byt
 		return err
 	}
 	return model.NewAPIError(fail.RetCode, fail.RetMsg)
-}
-
-
-
-package service
-
-import (
-	"github.com/google/uuid"
-	"halykbpm-git.homebank.kz/business-processes/compraIP/model"
-)
-
-type CompraService struct {
-	IntegraionService *IntegraionService
-}
-
-func (s *CompraService) CheckIP(client string) (string, error) {
-	guid := uuid.New().String()
-	entry := model.Row{IinBIN: client, Refer: guid, Status: false, Result: false}
-	return entry.IinBIN, nil
-}
-
-func (s *CompraService) GetResults(refer string) ([]model.Row, error) {
-	var rows []model.Row
-	return rows, nil
 }
