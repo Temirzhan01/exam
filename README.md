@@ -1,8 +1,220 @@
 [
   {
-    "id": 188013387,
-    "created": 1710149898668,
-    "lastUpdated": 1710149902970,
+    "id": 188470499,
+    "created": 1710229355218,
+    "lastUpdated": 1710229355261,
+    "type": {
+      "id": 6,
+      "name": "Недобросовестный поставщик закупок Самрук-Казына"
+    },
+    "rnn": null,
+    "bin": null,
+    "iin": "010904500574",
+    "content": {
+      
+    },
+    "status": "NO"
+  },
+  {
+    "id": 188470503,
+    "created": 1710229355251,
+    "lastUpdated": 1710229355280,
+    "type": {
+      "id": 27,
+      "name": "Налоговые задолженности"
+    },
+    "rnn": null,
+    "bin": null,
+    "iin": "010904500574",
+    "content": {
+      
+    },
+    "status": "NO"
+  },
+  {
+    "id": 188470501,
+    "created": 1710229355237,
+    "lastUpdated": 1710229356394,
+    "type": {
+      "id": 14,
+      "name": "Имеет налоговые задолженности"
+    },
+    "rnn": null,
+    "bin": null,
+    "iin": "010904500574",
+    "content": {
+      "rnn": "***",
+      "name": "***",
+      "iinBin": "***",
+      "sendTime": "2024-03-12T12:42:36",
+      "taxOrgInfo": [
+        {
+          "nameKz": "Алатау ауданы бойынша МКБ",
+          "nameRu": "УГД по Алатаускому району",
+          "charCode": "601001",
+          "totalArrear": "0",
+          "taxPayerInfo": [
+            {
+              "rnn": "***",
+              "iinBin": "***",
+              "nameKz": "***",
+              "nameRu": "***",
+              "taxArrear": "0",
+              "fineArrear": "0",
+              "poenaArrear": "0",
+              "totalArrear": "0",
+              "percentArrear": "0",
+              "bccArrearsInfo": [
+                {
+                  "bcc": "902101",
+                  "bccNameKz": "Әлеуметтiк аударымдар",
+                  "bccNameRu": "Поступления социальных отчислений",
+                  "taxArrear": "0",
+                  "fineArrear": "0",
+                  "poenaArrear": "0",
+                  "totalArrear": "0",
+                  "percentArrear": "0"
+                },
+                {
+                  "bcc": "904101",
+                  "bccNameKz": "Міндетті әлеуметтік медициналық сақтандыру аударымдар және  жарналарының түсімдері",
+                  "bccNameRu": "Поступления отчислений и взносов на обязательное социальное медицинское страхование",
+                  "taxArrear": "0",
+                  "fineArrear": "0",
+                  "poenaArrear": "0",
+                  "totalArrear": "0",
+                  "percentArrear": "0"
+                },
+                {
+                  "bcc": "901101",
+                  "bccNameKz": "Міндетті зейнетақы жарналары",
+                  "bccNameRu": "Поступления в пенсионный фонд 901101",
+                  "taxArrear": "0",
+                  "fineArrear": "0",
+                  "poenaArrear": "0",
+                  "totalArrear": "0",
+                  "percentArrear": "0"
+                }
+              ]
+            }
+          ],
+          "totalTaxArrear": "0",
+          "reportAcrualDate": "2024-03-12",
+          "socialContributionArrear": "0",
+          "pensionContributionArrear": "0",
+          "socialHealthInsuranceArrear": "0"
+        }
+      ],
+      "totalArrear": "0",
+      "totalTaxArrear": "0",
+      "socialContributionArrear": "0",
+      "pensionContributionArrear": "0",
+      "socialHealthInsuranceArrear": "0"
+    },
+    "status": "NO"
+  },
+  {
+    "id": 188470502,
+    "created": 1710229355245,
+    "lastUpdated": 1710229356404,
+    "type": {
+      "id": 26,
+      "name": "Налоговые задолженности"
+    },
+    "rnn": null,
+    "bin": null,
+    "iin": "010904500574",
+    "content": {
+      "rnn": "***",
+      "name": "***",
+      "iinBin": "***",
+      "sendTime": "2024-03-12T12:42:36",
+      "taxOrgInfo": [
+        {
+          "nameKz": "Алатау ауданы бойынша МКБ",
+          "nameRu": "УГД по Алатаускому району",
+          "charCode": "601001",
+          "totalArrear": "0",
+          "taxPayerInfo": [
+            {
+              "rnn": "***",
+              "iinBin": "***",
+              "nameKz": "***",
+              "nameRu": "***",
+              "taxArrear": "0",
+              "fineArrear": "0",
+              "poenaArrear": "0",
+              "totalArrear": "0",
+              "percentArrear": "0",
+              "bccArrearsInfo": [
+                {
+                  "bcc": "902101",
+                  "bccNameKz": "Әлеуметтiк аударымдар",
+                  "bccNameRu": "Поступления социальных отчислений",
+                  "taxArrear": "0",
+                  "fineArrear": "0",
+                  "poenaArrear": "0",
+                  "totalArrear": "0",
+                  "percentArrear": "0"
+                },
+                {
+                  "bcc": "904101",
+                  "bccNameKz": "Міндетті әлеуметтік медициналық сақтандыру аударымдар және  жарналарының түсімдері",
+                  "bccNameRu": "Поступления отчислений и взносов на обязательное социальное медицинское страхование",
+                  "taxArrear": "0",
+                  "fineArrear": "0",
+                  "poenaArrear": "0",
+                  "totalArrear": "0",
+                  "percentArrear": "0"
+                },
+                {
+                  "bcc": "901101",
+                  "bccNameKz": "Міндетті зейнетақы жарналары",
+                  "bccNameRu": "Поступления в пенсионный фонд 901101",
+                  "taxArrear": "0",
+                  "fineArrear": "0",
+                  "poenaArrear": "0",
+                  "totalArrear": "0",
+                  "percentArrear": "0"
+                }
+              ]
+            }
+          ],
+          "totalTaxArrear": "0",
+          "reportAcrualDate": "2024-03-12",
+          "socialContributionArrear": "0",
+          "pensionContributionArrear": "0",
+          "socialHealthInsuranceArrear": "0"
+        }
+      ],
+      "totalArrear": "0",
+      "totalTaxArrear": "0",
+      "socialContributionArrear": "0",
+      "pensionContributionArrear": "0",
+      "socialHealthInsuranceArrear": "0"
+    },
+    "status": "NO"
+  },
+  {
+    "id": 188470498,
+    "created": 1710229355209,
+    "lastUpdated": 1710234302905,
+    "type": {
+      "id": 2,
+      "name": "Исполнительные производства"
+    },
+    "rnn": null,
+    "bin": null,
+    "iin": "010904500574",
+    "content": [
+      
+    ],
+    "status": "NO"
+  },
+  {
+    "id": 188470500,
+    "created": 1710229355227,
+    "lastUpdated": 1710234304018,
     "type": {
       "id": 9,
       "name": "Должники/ответчики по исполнительным производствам"
@@ -13,6 +225,22 @@
     "content": {
       
     },
+    "status": "NO"
+  },
+  {
+    "id": 188470497,
+    "created": 1710229355198,
+    "lastUpdated": 1710234305372,
+    "type": {
+      "id": 1,
+      "name": "В списке должников, временно ограниченных на выезд из РК"
+    },
+    "rnn": null,
+    "bin": null,
+    "iin": "010904500574",
+    "content": [
+      
+    ],
     "status": "NO"
   },
   {
@@ -80,22 +308,6 @@
     "status": "NO"
   },
   {
-    "id": 188013398,
-    "created": 1710149898742,
-    "lastUpdated": 1710149904551,
-    "type": {
-      "id": 15,
-      "name": "В списке должников, временно ограниченных на выезд из РК"
-    },
-    "rnn": null,
-    "bin": null,
-    "iin": "010904500574",
-    "content": [
-      
-    ],
-    "status": "NO"
-  },
-  {
     "id": 188013419,
     "created": 1710149898969,
     "lastUpdated": 1710149899078,
@@ -125,38 +337,6 @@
     "content": {
       
     },
-    "status": "NO"
-  },
-  {
-    "id": 188013370,
-    "created": 1710149898537,
-    "lastUpdated": 1710149903915,
-    "type": {
-      "id": 1,
-      "name": "В списке должников, временно ограниченных на выезд из РК"
-    },
-    "rnn": null,
-    "bin": null,
-    "iin": "010904500574",
-    "content": [
-      
-    ],
-    "status": "NO"
-  },
-  {
-    "id": 188013372,
-    "created": 1710149898550,
-    "lastUpdated": 1710149901976,
-    "type": {
-      "id": 2,
-      "name": "Исполнительные производства"
-    },
-    "rnn": null,
-    "bin": null,
-    "iin": "010904500574",
-    "content": [
-      
-    ],
     "status": "NO"
   },
   {
@@ -304,44 +484,12 @@
     "status": "NO"
   },
   {
-    "id": 188013400,
-    "created": 1710149898763,
-    "lastUpdated": 1710149899058,
-    "type": {
-      "id": 17,
-      "name": "Должники/ответчики по исполнительным производствам"
-    },
-    "rnn": null,
-    "bin": null,
-    "iin": "010904500574",
-    "content": {
-      
-    },
-    "status": "NO"
-  },
-  {
     "id": 188013404,
     "created": 1710149898822,
     "lastUpdated": 1710149899059,
     "type": {
       "id": 21,
       "name": "Розыск без вести пропавших лиц"
-    },
-    "rnn": null,
-    "bin": null,
-    "iin": "010904500574",
-    "content": {
-      
-    },
-    "status": "NO"
-  },
-  {
-    "id": 188013406,
-    "created": 1710149898851,
-    "lastUpdated": 1710149899059,
-    "type": {
-      "id": 23,
-      "name": "В списке должников, временно ограниченных на выезд из РК"
     },
     "rnn": null,
     "bin": null,
@@ -448,12 +596,12 @@
     "status": "NO"
   },
   {
-    "id": 188013410,
-    "created": 1710149898897,
-    "lastUpdated": 1710149899064,
+    "id": 188013406,
+    "created": 1710149898851,
+    "lastUpdated": 1710234299843,
     "type": {
-      "id": 27,
-      "name": "Налоговые задолженности"
+      "id": 23,
+      "name": "В списке должников, временно ограниченных на выезд из РК"
     },
     "rnn": null,
     "bin": null,
@@ -624,12 +772,12 @@
     "status": "NO"
   },
   {
-    "id": 188013381,
-    "created": 1710149898625,
-    "lastUpdated": 1710149899041,
+    "id": 188013400,
+    "created": 1710149898763,
+    "lastUpdated": 1710234299842,
     "type": {
-      "id": 6,
-      "name": "Недобросовестный поставщик закупок Самрук-Казына"
+      "id": 17,
+      "name": "Должники/ответчики по исполнительным производствам"
     },
     "rnn": null,
     "bin": null,
@@ -640,167 +788,24 @@
     "status": "NO"
   },
   {
-    "id": 188013397,
-    "created": 1710149898733,
-    "lastUpdated": 1710149900176,
+    "id": 188013398,
+    "created": 1710149898742,
+    "lastUpdated": 1710234305382,
     "type": {
-      "id": 14,
-      "name": "Имеет налоговые задолженности"
+      "id": 15,
+      "name": "В списке должников, временно ограниченных на выезд из РК"
     },
     "rnn": null,
     "bin": null,
     "iin": "010904500574",
-    "content": {
-      "rnn": "***",
-      "name": "***",
-      "iinBin": "***",
-      "sendTime": "2024-03-11T14:38:20",
-      "taxOrgInfo": [
-        {
-          "nameKz": "Алатау ауданы бойынша МКБ",
-          "nameRu": "УГД по Алатаускому району",
-          "charCode": "601001",
-          "totalArrear": "0",
-          "taxPayerInfo": [
-            {
-              "rnn": "***",
-              "iinBin": "***",
-              "nameKz": "***",
-              "nameRu": "***",
-              "taxArrear": "0",
-              "fineArrear": "0",
-              "poenaArrear": "0",
-              "totalArrear": "0",
-              "percentArrear": "0",
-              "bccArrearsInfo": [
-                {
-                  "bcc": "902101",
-                  "bccNameKz": "Әлеуметтiк аударымдар",
-                  "bccNameRu": "Поступления социальных отчислений",
-                  "taxArrear": "0",
-                  "fineArrear": "0",
-                  "poenaArrear": "0",
-                  "totalArrear": "0",
-                  "percentArrear": "0"
-                },
-                {
-                  "bcc": "904101",
-                  "bccNameKz": "Міндетті әлеуметтік медициналық сақтандыру аударымдар және  жарналарының түсімдері",
-                  "bccNameRu": "Поступления отчислений и взносов на обязательное социальное медицинское страхование",
-                  "taxArrear": "0",
-                  "fineArrear": "0",
-                  "poenaArrear": "0",
-                  "totalArrear": "0",
-                  "percentArrear": "0"
-                },
-                {
-                  "bcc": "901101",
-                  "bccNameKz": "Міндетті зейнетақы жарналары",
-                  "bccNameRu": "Поступления в пенсионный фонд 901101",
-                  "taxArrear": "0",
-                  "fineArrear": "0",
-                  "poenaArrear": "0",
-                  "totalArrear": "0",
-                  "percentArrear": "0"
-                }
-              ]
-            }
-          ],
-          "totalTaxArrear": "0",
-          "reportAcrualDate": "2024-03-11",
-          "socialContributionArrear": "0",
-          "pensionContributionArrear": "0",
-          "socialHealthInsuranceArrear": "0"
-        }
-      ],
-      "totalArrear": "0",
-      "totalTaxArrear": "0",
-      "socialContributionArrear": "0",
-      "pensionContributionArrear": "0",
-      "socialHealthInsuranceArrear": "0"
-    },
-    "status": "NO"
-  },
-  {
-    "id": 188013409,
-    "created": 1710149898890,
-    "lastUpdated": 1710149901001,
-    "type": {
-      "id": 26,
-      "name": "Налоговые задолженности"
-    },
-    "rnn": null,
-    "bin": null,
-    "iin": "010904500574",
-    "content": {
-      "rnn": "***",
-      "name": "***",
-      "iinBin": "***",
-      "sendTime": "2024-03-11T14:38:20",
-      "taxOrgInfo": [
-        {
-          "nameKz": "Алатау ауданы бойынша МКБ",
-          "nameRu": "УГД по Алатаускому району",
-          "charCode": "601001",
-          "totalArrear": "0",
-          "taxPayerInfo": [
-            {
-              "rnn": "***",
-              "iinBin": "***",
-              "nameKz": "***",
-              "nameRu": "***",
-              "taxArrear": "0",
-              "fineArrear": "0",
-              "poenaArrear": "0",
-              "totalArrear": "0",
-              "percentArrear": "0",
-              "bccArrearsInfo": [
-                {
-                  "bcc": "902101",
-                  "bccNameKz": "Әлеуметтiк аударымдар",
-                  "bccNameRu": "Поступления социальных отчислений",
-                  "taxArrear": "0",
-                  "fineArrear": "0",
-                  "poenaArrear": "0",
-                  "totalArrear": "0",
-                  "percentArrear": "0"
-                },
-                {
-                  "bcc": "904101",
-                  "bccNameKz": "Міндетті әлеуметтік медициналық сақтандыру аударымдар және  жарналарының түсімдері",
-                  "bccNameRu": "Поступления отчислений и взносов на обязательное социальное медицинское страхование",
-                  "taxArrear": "0",
-                  "fineArrear": "0",
-                  "poenaArrear": "0",
-                  "totalArrear": "0",
-                  "percentArrear": "0"
-                },
-                {
-                  "bcc": "901101",
-                  "bccNameKz": "Міндетті зейнетақы жарналары",
-                  "bccNameRu": "Поступления в пенсионный фонд 901101",
-                  "taxArrear": "0",
-                  "fineArrear": "0",
-                  "poenaArrear": "0",
-                  "totalArrear": "0",
-                  "percentArrear": "0"
-                }
-              ]
-            }
-          ],
-          "totalTaxArrear": "0",
-          "reportAcrualDate": "2024-03-11",
-          "socialContributionArrear": "0",
-          "pensionContributionArrear": "0",
-          "socialHealthInsuranceArrear": "0"
-        }
-      ],
-      "totalArrear": "0",
-      "totalTaxArrear": "0",
-      "socialContributionArrear": "0",
-      "pensionContributionArrear": "0",
-      "socialHealthInsuranceArrear": "0"
-    },
+    "content": [
+      
+    ],
     "status": "NO"
   }
 ]
+Тут короче ошибка при десериализации, тут этот контент может быть разным, но данные внутри и нен нужны в принципе. Они могут быть разные, поэтому нет желания все это готовить пиздец просто 
+{
+    "code": -1,
+    "message": "GetResults: GetRiskFactors: json: cannot unmarshal object into Go struct field RiskFactor.content of type []model.Content"
+}
