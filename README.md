@@ -1,27 +1,16 @@
-package router
+declare 
+cur OUT SYS_REFCURSOR;
 
-import (
-	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
-	_ "halykbpm-git.homebank.kz/business-processes/compra.integration/docs"
-	"halykbpm-git.homebank.kz/business-processes/compra.integration/handler"
-	"io/ioutil"
-)
+TYPE myType is RECORD(
+     CHOOSE_PRC VARCHAR2(100)
+);
 
-// InitRouter initialize routing information
-func InitRouter(h *handler.Handler, production bool) *gin.Engine {
-	if production {
-		gin.SetMode(gin.ReleaseMode)
-		gin.DefaultWriter = ioutil.Discard
-	}
-	r := gin.Default()
-	if !production {
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
-	r.POST("/checkIP/iinBIN/:iinBIN", h.CheckIP)
-	r.POST("/getCheckResults/refer/:refer", h.GetCheckResults)
-	r.GET("/healthz")
+my myType;
 
-	return r
-}
+BEGIN 
+     dbms_output.enable;
+     kzc_bwx.opt_spm.CHOOSE_PRC_FOR_IBFL@PROD.KZC('010904500574', cur);
+     fetch cur into my;
+     dbms_output.put_line('res' || my.CHOOSE_PRC);
+     close cur;
+END;
