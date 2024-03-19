@@ -1,16 +1,19 @@
-{
-    "error": "ORA-00604: error occurred at recursive SQL level 1\nORA-01882: timezone region not found"
-}
-        public async Task<IEnumerable<Authority>> GetAuthoritiesAsync(string branchNumber)
-        {
-            var query = _context.AUTHORITIES_MSB;
-            if (branchNumber == "DRKK1" || branchNumber == "DRKK2" || branchNumber == "DRKK3")
-            {
-                var likeCode = branchNumber.Substring(0, 4);
-                return query.Where(a => EF.Functions.Like(a.BRANCH_CODE, likeCode) || a.BRANCH_CODE == "DKA" || a.BRANCH_CODE == "ZPP" && DateTime.Now.Date < a.VALIDITY.AddDays(1)).ToList();
-            }
-            else
-            {
-                return query.Where(a => a.BRANCH_CODE == branchNumber && DateTime.Now.Date < a.VALIDITY.AddDays(1)).ToList();
-            }
-        }
+Уважаемые коллеги,
+
+Пользователи, которые работают в офисе, должны осуществлять подключение к Terminal_Desktop, Remote_PC и VDI через точку входа https://xaapp.halykbank.nb/Citrix/smartWeb/ 
+Подключение через внешнюю точку при нахождении в офисе недоступно.
+
+Пользователям, которые работают удалённо и испытывают проблемы с подключением, следует обратить внимание, что после нажатия на ярлык удаленного рабочего стола, в оконе «Загрузки» браузера появляется файл формата ICA, при нажатии на который (Open file), должно открыться окно с корректной сессией.
+ 
+
+Также рекомендуется полная очистка браузера от кэша и кукис, нажав ctrl+shift+del и выбрав период «за всё время» или использование альтернативного браузера.
+ 
+Если вышеуказанные способы не помогают с решением проблемы, то рекомендуется переключение на «облегченную версию» Citrix.
+Для этого нужно открыть настройки и изменить используемый Citrix Reciver на «Браузер». 
+ 
+
+
+С уважением,
+Тумбаев Бахыт
+ 
+Начальник управления серверных платформ
