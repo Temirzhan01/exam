@@ -1,19 +1,28 @@
-Уважаемые коллеги,
+using Microsoft.EntityFrameworkCore;
+using SPM3._0Service.Models;
 
-Пользователи, которые работают в офисе, должны осуществлять подключение к Terminal_Desktop, Remote_PC и VDI через точку входа https://xaapp.halykbank.nb/Citrix/smartWeb/ 
-Подключение через внешнюю точку при нахождении в офисе недоступно.
+namespace SPM3._0Service.Data
+{
+    public class OracleDbContext : DbContext
+    {
+        public DbSet<Authority> AUTHORITIES_MSB { get; set; }
+        public OracleDbContext(DbContextOptions<OracleDbContext> options) : base(options) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Authority>().ToTable("AUTHORITIES_MSB", "cardcolv")
+        }
+    }
+}
 
-Пользователям, которые работают удалённо и испытывают проблемы с подключением, следует обратить внимание, что после нажатия на ярлык удаленного рабочего стола, в оконе «Загрузки» браузера появляется файл формата ICA, при нажатии на который (Open file), должно открыться окно с корректной сессией.
- 
+builder.Services.AddDbContext<OracleDbContext>(options =>
+{
+    var conStrBuilder = new OracleConnectionStringBuilder(
+          builder.Configuration.GetConnectionString("DefaultConnection"));
+    //conStrBuilder.Password = builder.Configuration["DbPassword"];
 
-Также рекомендуется полная очистка браузера от кэша и кукис, нажав ctrl+shift+del и выбрав период «за всё время» или использование альтернативного браузера.
- 
-Если вышеуказанные способы не помогают с решением проблемы, то рекомендуется переключение на «облегченную версию» Citrix.
-Для этого нужно открыть настройки и изменить используемый Citrix Reciver на «Браузер». 
- 
-
-
-С уважением,
-Тумбаев Бахыт
- 
-Начальник управления серверных платформ
+    options.UseOracle(conStrBuilder.ConnectionString, options => options.UseOracleSQLCompatibility("11"));
+});
