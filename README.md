@@ -1,32 +1,33 @@
-INSERT ALL 
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('1', 'КР6_ИСТОЧ_КР.721')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('18', 'КР6_ИСТОЧ_КР.731')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('20', 'КР6_ИСТОЧ_КР.731')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.01', 'Собственные средства')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.04', 'Средства международных финансовых организаций')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.114', 'Cобственные средства 3 транш')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.721', 'Даму кредиты2')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.723', 'Даму-Жанаозен')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.724', 'Даму-Женское предпринимательство')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.725', 'Средства выделенные АО «Банк Развития Казахстана»')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.726', 'Даму Ондирис 2')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.801 ', 'Даму МИО Астана')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.802', 'Даму МИО Алматы')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.803', 'Даму МИО Акмолинская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.804', 'Даму МИО Актюбинская область №ПРФ-36')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.805', 'Даму МИО Алматинская регион')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.806', 'Даму МИО Атырауская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.808', 'Даму МИО Жамбылская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.809', 'Даму МИО ЗКО')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.810', 'Даму МИО Карагандинская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.811', 'Даму МИО Костанайская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.812', 'Даму МИО Кызылординская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.813', 'Даму МИО Мангистауская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.814', 'Даму МИО Павлодарская область')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.815', 'Даму МИО СКО')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.816', 'Даму МИО ЮКО')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.817', 'Даму МИО Актюбинская область №ПРФ-35')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.818', 'Даму МИО Алматинская область г.Талдыкорган')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.819', 'Даму МИО Талдыкорганский регион')
-INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.807', 'Даму МИО ВКО')
-SELECT 1 FROM DUAL;
+                    new SelectListItem(){Value="1", Text=""},
+                    new SelectListItem(){Value="2", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.39", Text="KZ746017131000000883"},
+                    new SelectListItem(){Value="КР_ГОСПОД.40", Text="KZ746017131000000883"},
+                    new SelectListItem(){Value="КР_ГОСПОД.41", Text="KZ746017131000000883"},
+                    new SelectListItem(){Value="КР_ГОСПОД.44", Text="KZ746017131000000883"},
+                    new SelectListItem(){Value="КР_ГОСПОД.45", Text="KZ746017131000000883"},
+                    new SelectListItem(){Value="КР_ГОСПОД.1", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.2", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.3", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.47", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.48", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.49", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.62", Text="KZ396018861000063361"},
+                    new SelectListItem(){Value="КР_ГОСПОД.38", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="КР_ГОСПОД.35", Text="KZ146010231000049062"},
+                    new SelectListItem(){Value="3", Text=""},
+                    new SelectListItem(){Value="4", Text="KZ166010131000177265"},
+                    new SelectListItem(){Value="5", Text="KZ886010011220100001"},
+                    new SelectListItem(){Value="6", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="7", Text=""},
+                    new SelectListItem(){Value="8", Text=""},
+                    new SelectListItem(){Value="10", Text="KZ166010131000177265"},
+                    new SelectListItem(){Value="11", Text=""},
+                    new SelectListItem(){Value="12", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="13", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="14", Text="KZ166010131000177265"},
+                    new SelectListItem(){Value="15", Text="KZ166010131000177265"},
+                    new SelectListItem(){Value="16", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="17", Text="KZ336010131000134279"},
+                    new SelectListItem(){Value="22", Text="KZ336010131000134279"}
+
+                    SUBSIDY_WRITING_OFF_LIST - название таблицы 
