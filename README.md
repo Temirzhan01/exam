@@ -1,3 +1,19 @@
-    var supporttype = new[] { "Субсид", "субсид", "гарантир", "Гарантир" };
-    string _stateSupportType = new CLASB.ViewModels.Directory().StateSupportType.SingleOrDefault(x => x.Value == Model.BaseClaFinInstrument[Model.index].StateProgram.StateSupportType).Text;
-    Model.FeeRateEndProgramProperties.isVisible = supporttype.Any(x => _stateSupportType.Contains(x)) ? true : false;
+STATE_PROGRAM это название таблицы, ниже данные, нужно написать скрипт добавления их в эту таблицу, значение Value в ID а Text в NAME
+                    new SelectListItem(){Value="1", Text="Даму-Ондирис"},
+                    new SelectListItem(){Value="2", Text="Национальный проект"},
+                    new SelectListItem(){Value="3", Text="Даму-Жанаозен"},
+                    new SelectListItem(){Value="4", Text="Субсидирование моногорода"},
+                    new SelectListItem(){Value="5", Text="Агробизнес 2020-субсидирование"},
+                    new SelectListItem(){Value="6", Text="Программа субсидирование и гарантирование Жанаозен"},
+                    new SelectListItem(){Value="7", Text="Даму Ондирис 2"},
+                    new SelectListItem(){Value="8", Text="Даму-Женское предпринимательство"},
+                    new SelectListItem(){Value="10", Text="Дорожная карта бизнеса 2020 + Субсидирование моногорода + Даму-Женское предпринимательство"},
+                    new SelectListItem(){Value="11", Text="Дорожная карта бизнеса 2020 + Даму-Ондирис 2"},
+                    new SelectListItem(){Value="12", Text="Дорожная карта бизнеса 2020 + Даму-Женское предпринимательство"},
+                    new SelectListItem(){Value="13", Text="Дорожная карта бизнеса 2020 + Даму-Ондирис"},
+                    new SelectListItem(){Value="14", Text="Субсидирование моногорода + Даму-Женское предпринимательство"},
+                    new SelectListItem(){Value="15", Text="Субсидирование моногорода + Даму-Ондирис"},
+                    new SelectListItem(){Value="16", Text="Программа субсидирование и гарантирование Жанаозен + Даму-Женское предпринимательство"},
+                    new SelectListItem(){Value="17", Text="Программа субсидирование и гарантирование Жанаозен + Даму-Ондирис"},
+                    new SelectListItem(){Value="22", Text="Даму МИО"},
+                    new SelectListItem(){Value="31", Text="Массовое предпринимательство"}
