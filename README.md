@@ -1,33 +1,33 @@
-                    new SelectListItem(){Value="1", Text=""},
-                    new SelectListItem(){Value="2", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.39", Text="KZ746017131000000883"},
-                    new SelectListItem(){Value="КР_ГОСПОД.40", Text="KZ746017131000000883"},
-                    new SelectListItem(){Value="КР_ГОСПОД.41", Text="KZ746017131000000883"},
-                    new SelectListItem(){Value="КР_ГОСПОД.44", Text="KZ746017131000000883"},
-                    new SelectListItem(){Value="КР_ГОСПОД.45", Text="KZ746017131000000883"},
-                    new SelectListItem(){Value="КР_ГОСПОД.1", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.2", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.3", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.47", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.48", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.49", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.62", Text="KZ396018861000063361"},
-                    new SelectListItem(){Value="КР_ГОСПОД.38", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="КР_ГОСПОД.35", Text="KZ146010231000049062"},
-                    new SelectListItem(){Value="3", Text=""},
-                    new SelectListItem(){Value="4", Text="KZ166010131000177265"},
-                    new SelectListItem(){Value="5", Text="KZ886010011220100001"},
-                    new SelectListItem(){Value="6", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="7", Text=""},
-                    new SelectListItem(){Value="8", Text=""},
-                    new SelectListItem(){Value="10", Text="KZ166010131000177265"},
-                    new SelectListItem(){Value="11", Text=""},
-                    new SelectListItem(){Value="12", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="13", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="14", Text="KZ166010131000177265"},
-                    new SelectListItem(){Value="15", Text="KZ166010131000177265"},
-                    new SelectListItem(){Value="16", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="17", Text="KZ336010131000134279"},
-                    new SelectListItem(){Value="22", Text="KZ336010131000134279"}
-
-                    SUBSIDY_WRITING_OFF_LIST - название таблицы 
+INSERT ALL
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('1', '')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('2', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.39', 'KZ746017131000000883')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.40', 'KZ746017131000000883')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.41', 'KZ746017131000000883')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.44', 'KZ746017131000000883')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.45', 'KZ746017131000000883')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.1', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.2', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.3', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.47', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.48', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.49', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.62', 'KZ396018861000063361')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.38', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.35', 'KZ146010231000049062')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('3', '')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('4', 'KZ166010131000177265')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('5', 'KZ886010011220100001')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('6', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('7', '')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('8', '')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('10', 'KZ166010131000177265')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('11', '')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('12', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('13', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('14', 'KZ166010131000177265')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('15', 'KZ166010131000177265')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('16', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('17', 'KZ336010131000134279')
+INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('22', 'KZ336010131000134279')
+SELECT 1 FROM DUAL;
