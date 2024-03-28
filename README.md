@@ -1,32 +1,32 @@
-                    new SelectListItem(){Value = "1", Text = "КР6_ИСТОЧ_КР.721"},
-                    new SelectListItem(){Value = "18", Text = "КР6_ИСТОЧ_КР.731"},
-                    new SelectListItem(){Value = "20", Text = "КР6_ИСТОЧ_КР.731"},
-                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.01", Text = "Собственные средства" },
-                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.04", Text = "Средства международных финансовых организаций" },
-                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.114", Text ="Cобственные средства 3 транш" },
-                    new SelectListItem(){ Value= "КР6_ИСТОЧ_КР.721", Text = "Даму кредиты2" },
-                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.723", Text ="Даму-Жанаозен" },
-                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.724", Text = "Даму-Женское предпринимательство" },
-                    new SelectListItem(){Value ="КР6_ИСТОЧ_КР.725", Text ="Средства выделенные АО «Банк Развития Казахстана»" },
-                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.726", Text = "Даму Ондирис 2" },
-                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.801 ", Text = "Даму МИО Астана" },
-                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.802", Text ="Даму МИО Алматы" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.803", Text = "Даму МИО Акмолинская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.804", Text="Даму МИО Актюбинская область №ПРФ-36" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.805", Text = " Даму МИО Алматинская регион" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.806", Text="Даму МИО Атырауская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.808", Text="Даму МИО Жамбылская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.809", Text="Даму МИО ЗКО" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.810", Text="Даму МИО Карагандинская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.811", Text="Даму МИО Костанайская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.812", Text="Даму МИО Кызылординская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.813", Text="Даму МИО Мангистауская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.814", Text="Даму МИО Павлодарская область" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.815", Text="Даму МИО СКО" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.816", Text="Даму МИО ЮКО" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.817", Text="Даму МИО Актюбинская область №ПРФ-35" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.818", Text="Даму МИО Алматинская область г.Талдыкорган" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.819", Text="Даму МИО Талдыкорганский регион" },
-                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.807", Text="Даму МИО ВКО" }
-
-                    Теперь же эти данные в том же формате в таблицу CREDIT_SOURCES 
+INSERT ALL 
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('1', 'КР6_ИСТОЧ_КР.721')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('18', 'КР6_ИСТОЧ_КР.731')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('20', 'КР6_ИСТОЧ_КР.731')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.01', 'Собственные средства')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.04', 'Средства международных финансовых организаций')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.114', 'Cобственные средства 3 транш')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.721', 'Даму кредиты2')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.723', 'Даму-Жанаозен')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.724', 'Даму-Женское предпринимательство')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.725', 'Средства выделенные АО «Банк Развития Казахстана»')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.726', 'Даму Ондирис 2')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.801 ', 'Даму МИО Астана')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.802', 'Даму МИО Алматы')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.803', 'Даму МИО Акмолинская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.804', 'Даму МИО Актюбинская область №ПРФ-36')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.805', 'Даму МИО Алматинская регион')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.806', 'Даму МИО Атырауская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.808', 'Даму МИО Жамбылская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.809', 'Даму МИО ЗКО')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.810', 'Даму МИО Карагандинская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.811', 'Даму МИО Костанайская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.812', 'Даму МИО Кызылординская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.813', 'Даму МИО Мангистауская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.814', 'Даму МИО Павлодарская область')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.815', 'Даму МИО СКО')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.816', 'Даму МИО ЮКО')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.817', 'Даму МИО Актюбинская область №ПРФ-35')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.818', 'Даму МИО Алматинская область г.Талдыкорган')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.819', 'Даму МИО Талдыкорганский регион')
+INTO CREDIT_SOURCES (ID, NAME) VALUES ('КР6_ИСТОЧ_КР.807', 'Даму МИО ВКО')
+SELECT 1 FROM DUAL;
