@@ -1,20 +1,32 @@
-INSERT ALL 
-INTO STATE_PROGRAM (ID, NAME) VALUES ('1', 'Даму-Ондирис')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('2', 'Национальный проект')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('3', 'Даму-Жанаозен')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('4', 'Субсидирование моногорода')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('5', 'Агробизнес 2020-субсидирование')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('6', 'Программа субсидирование и гарантирование Жанаозен')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('7', 'Даму Ондирис 2')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('8', 'Даму-Женское предпринимательство')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('10', 'Дорожная карта бизнеса 2020 + Субсидирование моногорода + Даму-Женское предпринимательство')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('11', 'Дорожная карта бизнеса 2020 + Даму-Ондирис 2')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('12', 'Дорожная карта бизнеса 2020 + Даму-Женское предпринимательство')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('13', 'Дорожная карта бизнеса 2020 + Даму-Ондирис')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('14', 'Субсидирование моногорода + Даму-Женское предпринимательство')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('15', 'Субсидирование моногорода + Даму-Ондирис')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('16', 'Программа субсидирование и гарантирование Жанаозен + Даму-Женское предпринимательство')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('17', 'Программа субсидирование и гарантирование Жанаозен + Даму-Ондирис')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('22', 'Даму МИО')
-INTO STATE_PROGRAM (ID, NAME) VALUES ('31', 'Массовое предпринимательство')
-SELECT 1 FROM DUAL;
+                    new SelectListItem(){Value = "1", Text = "КР6_ИСТОЧ_КР.721"},
+                    new SelectListItem(){Value = "18", Text = "КР6_ИСТОЧ_КР.731"},
+                    new SelectListItem(){Value = "20", Text = "КР6_ИСТОЧ_КР.731"},
+                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.01", Text = "Собственные средства" },
+                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.04", Text = "Средства международных финансовых организаций" },
+                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.114", Text ="Cобственные средства 3 транш" },
+                    new SelectListItem(){ Value= "КР6_ИСТОЧ_КР.721", Text = "Даму кредиты2" },
+                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.723", Text ="Даму-Жанаозен" },
+                    new SelectListItem(){Value = "КР6_ИСТОЧ_КР.724", Text = "Даму-Женское предпринимательство" },
+                    new SelectListItem(){Value ="КР6_ИСТОЧ_КР.725", Text ="Средства выделенные АО «Банк Развития Казахстана»" },
+                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.726", Text = "Даму Ондирис 2" },
+                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.801 ", Text = "Даму МИО Астана" },
+                    new SelectListItem(){Value= "КР6_ИСТОЧ_КР.802", Text ="Даму МИО Алматы" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.803", Text = "Даму МИО Акмолинская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.804", Text="Даму МИО Актюбинская область №ПРФ-36" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.805", Text = " Даму МИО Алматинская регион" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.806", Text="Даму МИО Атырауская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.808", Text="Даму МИО Жамбылская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.809", Text="Даму МИО ЗКО" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.810", Text="Даму МИО Карагандинская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.811", Text="Даму МИО Костанайская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.812", Text="Даму МИО Кызылординская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.813", Text="Даму МИО Мангистауская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.814", Text="Даму МИО Павлодарская область" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.815", Text="Даму МИО СКО" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.816", Text="Даму МИО ЮКО" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.817", Text="Даму МИО Актюбинская область №ПРФ-35" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.818", Text="Даму МИО Алматинская область г.Талдыкорган" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.819", Text="Даму МИО Талдыкорганский регион" },
+                    new SelectListItem(){Value="КР6_ИСТОЧ_КР.807", Text="Даму МИО ВКО" }
+
+                    Теперь же эти данные в том же формате в таблицу CREDIT_SOURCES 
