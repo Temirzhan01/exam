@@ -1,19 +1,22 @@
-INSERT INTO STATE_PROGRAM (ID, NAME) VALUES
-(1, 'Даму-Ондирис'),
-(2, 'Национальный проект'),
-(3, 'Даму-Жанаозен'),
-(4, 'Субсидирование моногорода'),
-(5, 'Агробизнес 2020-субсидирование'),
-(6, 'Программа субсидирование и гарантирование Жанаозен'),
-(7, 'Даму Ондирис 2'),
-(8, 'Даму-Женское предпринимательство'),
-(10, 'Дорожная карта бизнеса 2020 + Субсидирование моногорода + Даму-Женское предпринимательство'),
-(11, 'Дорожная карта бизнеса 2020 + Даму-Ондирис 2'),
-(12, 'Дорожная карта бизнеса 2020 + Даму-Женское предпринимательство'),
-(13, 'Дорожная карта бизнеса 2020 + Даму-Ондирис'),
-(14, 'Субсидирование моногорода + Даму-Женское предпринимательство'),
-(15, 'Субсидирование моногорода + Даму-Ондирис'),
-(16, 'Программа субсидирование и гарантирование Жанаозен + Даму-Женское предпринимательство'),
-(17, 'Программа субсидирование и гарантирование Жанаозен + Даму-Ондирис'),
-(22, 'Даму МИО'),
-(31, 'Массовое предпринимательство');
+INSERT ALL 
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+    INTO STATE_PROGRAM ( ID, NAME ) VALUES ( 1, 'Left Handed Screwdriver' )
+SELECT 1 FROM dual;
