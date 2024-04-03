@@ -1,33 +1,73 @@
-INSERT ALL
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('1', '')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('2', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.39', 'KZ746017131000000883')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.40', 'KZ746017131000000883')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.41', 'KZ746017131000000883')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.44', 'KZ746017131000000883')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.45', 'KZ746017131000000883')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.1', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.2', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.3', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.47', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.48', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.49', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.62', 'KZ396018861000063361')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.38', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('КР_ГОСПОД.35', 'KZ146010231000049062')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('3', '')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('4', 'KZ166010131000177265')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('5', 'KZ886010011220100001')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('6', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('7', '')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('8', '')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('10', 'KZ166010131000177265')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('11', '')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('12', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('13', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('14', 'KZ166010131000177265')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('15', 'KZ166010131000177265')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('16', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('17', 'KZ336010131000134279')
-INTO SUBSIDY_WRITING_OFF_LIST (ID, NAME) VALUES ('22', 'KZ336010131000134279')
-SELECT 1 FROM DUAL;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Oracle.ManagedDataAccess.Client;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
+using SPM3._0Service.Data;
+using SPM3._0Service.Extensions;
+using SPM3._0Service.Models;
+using SPM3._0Service.Repositories;
+using SPM3._0Service.Services;
+using System.Reflection;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddServices();
+builder.Services.Configure<ExternalServices>(builder.Configuration.GetSection("ExternalServices"));
+builder.Services.AddDbContext<OracleDbContext>(options =>
+{
+    var conStrBuilder = new OracleConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseOracle(conStrBuilder.ConnectionString, options => options.UseOracleSQLCompatibility("11"));
+});
+
+ConfigureLogging();
+builder.Host.UseSerilog();
+
+void ConfigureLogging()
+{
+    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+    var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile(
+            $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+            optional: true)
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+        .Enrich.WithEnvironmentName()
+        .WriteTo.Debug()
+        .WriteTo.Console()
+        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment!))
+        .Enrich.WithProperty("Environment", environment!)
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
+
+ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)
+{
+    return new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+    };
+}
+
+var app = builder.Build();
+
+app.MapHealthChecks("/healthz");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseSerilogRequestLogging();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+Оцени этот файл, расскажи конфигурации логирования, они правильно настроены? их возможно вынести в другой файл
