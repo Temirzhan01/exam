@@ -1,187 +1,79 @@
-public class ErrorCounterService
+public class AdvancedCircuitBreaker
 {
-    private int _errorCount = 0;
-    private readonly int _maxErrors;
-    private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(10);
-    private readonly HttpClient _httpClient;
-    private bool _isExternalServiceAvailable = true;
+    private readonly AsyncCircuitBreakerPolicy _circuitBreakerPolicy;
+    private DateTime _lastTrialRequestTime = DateTime.MinValue;
 
-    public ErrorCounterService(int maxErrors, HttpClient httpClient)
+    public AdvancedCircuitBreaker()
     {
-        _maxErrors = maxErrors;
-        _httpClient = httpClient;
-        Task.Run(() => CheckExternalServiceAvailability());
+        _circuitBreakerPolicy = Policy
+            .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .CircuitBreakerAsync(
+                exceptionsAllowedBeforeBreaking: 5,
+                durationOfBreak: TimeSpan.FromMinutes(30),
+                onBreak: (result, breakDelay, context) =>
+                {
+                    Console.WriteLine($"Circuit broken: {result.Result.StatusCode}");
+                },
+                onReset: context => Console.WriteLine("Circuit reset."),
+                onHalfOpen: () => Console.WriteLine("Circuit is half-open. Trying a single request..."));
     }
 
-    public bool IsThresholdReached => _errorCount >= _maxErrors && !_isExternalServiceAvailable;
-
-    public void IncrementErrorCount()
+    public async Task<HttpResponseMessage> ExecuteAsync(Func<Task<HttpResponseMessage>> action)
     {
-        Interlocked.Increment(ref _errorCount);
-    }
-
-    public void ResetErrorCount()
-    {
-        Interlocked.Exchange(ref _errorCount, 0);
-    }
-
-    private async Task CheckExternalServiceAvailability()
-    {
-        while (true)
+        if (_circuitBreakerPolicy.CircuitState == CircuitState.Open &&
+            (DateTime.UtcNow - _lastTrialRequestTime).TotalSeconds > 20)
         {
-            if (_errorCount >= _maxErrors)
+            // Allow a single trial request to go through
+            _lastTrialRequestTime = DateTime.UtcNow;
+            try
             {
-                // Логика проверки доступности внешнего сервиса
-                var response = await _httpClient.GetAsync("URL_внешнего_сервиса");
+                var response = await action();
                 if (response.IsSuccessStatusCode)
                 {
-                    _isExternalServiceAvailable = true;
-                    ResetErrorCount();
+                    _circuitBreakerPolicy.Reset(); // Manually resetting the circuit breaker if the external service is available
                 }
-                else
-                {
-                    _isExternalServiceAvailable = false;
-                }
+                return response;
             }
-            await Task.Delay(_checkInterval);
-        }
-    }
-}
-
-services.AddSingleton<ErrorCounterService>(new ErrorCounterService(n, new HttpClient()));
-
-public class ErrorHandlingMiddleware
-{
-    private readonly RequestDelegate _next;
-
-    public ErrorHandlingMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task Invoke(HttpContext context, ErrorCounterService errorCounterService)
-    {
-        if (errorCounterService.IsThresholdReached)
-        {
-            context.Response.StatusCode = 504;
-            await context.Response.WriteAsync("Сервис временно недоступен.");
-            return;
-        }
-
-        await _next(context);
-    }
-}
-
-// В `Startup.cs` или `Program.cs`
-app.UseMiddleware<ErrorHandlingMiddleware>();
-
-public class ErrorCounterService
-{
-    private int _errorCount = 0;
-    private readonly int _maxErrors;
-    private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(10);
-    private readonly HttpClient _httpClient;
-    private bool _isExternalServiceAvailable = true;
-    private readonly string _serviceEndpoint;
-
-    public ErrorCounterService(int maxErrors, HttpClient httpClient, string serviceEndpoint)
-    {
-        _maxErrors = maxErrors;
-        _httpClient = httpClient;
-        _serviceEndpoint = serviceEndpoint;
-        Task.Run(() => CheckExternalServiceAvailability());
-    }
-
-    public bool IsThresholdReached => _errorCount >= _maxErrors && !_isExternalServiceAvailable;
-
-    public void IncrementErrorCount()
-    {
-        Interlocked.Increment(ref _errorCount);
-    }
-
-    public void ResetErrorCount()
-    {
-        Interlocked.Exchange(ref _errorCount, 0);
-    }
-
-    private async Task CheckExternalServiceAvailability()
-    {
-        while (true)
-        {
-            if (_errorCount >= _maxErrors)
+            catch
             {
-                var response = await _httpClient.GetAsync(_serviceEndpoint);
-                if (response.IsSuccessStatusCode)
-                {
-                    _isExternalServiceAvailable = true;
-                    ResetErrorCount();
-                }
-                else
-                {
-                    _isExternalServiceAvailable = false;
-                }
+                return new HttpResponseMessage(HttpStatusCode.GatewayTimeout); // Return 504 if the trial request fails
             }
-            await Task.Delay(_checkInterval);
+        }
+        else
+        {
+            try
+            {
+                // Regular request processing
+                return await _circuitBreakerPolicy.ExecuteAsync(action);
+            }
+            catch (BrokenCircuitException)
+            {
+                return new HttpResponseMessage(HttpStatusCode.GatewayTimeout); // Return 504 if the circuit is open
+            }
         }
     }
 }
 
-services.AddSingleton<ErrorCounterService>(serviceProvider =>
+public class MyService
 {
-    return new ErrorCounterService(10, new HttpClient(), "http://example.com/api");
-});
-services.AddSingleton<ErrorCounterService>(serviceProvider =>
-{
-    return new ErrorCounterService(10, new HttpClient(), "http://another-example.com/api");
-});
+    private readonly AdvancedCircuitBreaker _externalServiceACircuitBreaker;
+    private readonly AdvancedCircuitBreaker _externalServiceBCircuitBreaker;
+    private HttpClient _httpClient;
 
-public async Task Invoke(HttpContext context, IServiceProvider serviceProvider)
-{
-    // Определение сервиса на основе URL запроса или другого параметра
-    var targetService = DetermineService(context.Request.Path);
-    var errorCounterService = serviceProvider.GetService<ErrorCounterService>(targetService);
-
-    if (errorCounterService != null && errorCounterService.IsThresholdReached)
+    public MyService()
     {
-        context.Response.StatusCode = 504;
-        await context.Response.WriteAsync("Сервис временно недоступен.");
-        return;
+        _externalServiceACircuitBreaker = new AdvancedCircuitBreaker();
+        _externalServiceBCircuitBreaker = new AdvancedCircuitBreaker();
+        _httpClient = new HttpClient();
     }
 
-    await _next(context);
-}
-
-public class ErrorCounterServiceFactory
-{
-    private readonly IServiceProvider _serviceProvider;
-
-    public ErrorCounterServiceFactory(IServiceProvider serviceProvider)
+    public async Task<HttpResponseMessage> CallExternalServiceA(string url)
     {
-        _serviceProvider = serviceProvider;
+        return await _externalServiceACircuitBreaker.ExecuteAsync(() => _httpClient.GetAsync(url));
     }
 
-    public ErrorCounterService Create(string endpoint)
+    public async Task<HttpResponseMessage> CallExternalServiceB(string url)
     {
-        // Пример создания с параметрами специфичными для каждого сервиса
-        var maxErrors = 5;  // Можно брать из конфигурации
-        var httpClient = _serviceProvider.GetRequiredService<HttpClient>();
-
-        return new ErrorCounterService(maxErrors, httpClient, endpoint);
+        return await _externalServiceBCircuitBreaker.ExecuteAsync(() => _httpClient.GetAsync(url));
     }
-}
-
-services.AddSingleton<ErrorCounterServiceFactory>();
-services.AddSingleton<HttpClient>();
-
-public class SomeService
-{
-    private readonly ErrorCounterService _errorCounterService;
-
-    public SomeService(ErrorCounterServiceFactory factory)
-    {
-        // Создание сервиса для конкретного ендпоинта
-        _errorCounterService = factory.Create("http://example.com/api");
-    }
-
-    // Использование _errorCounterService для обработки запросов к этому ендпоинту
 }
