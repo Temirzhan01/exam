@@ -1,9 +1,6 @@
-Ниже это содержание PartialView которых может быть несколько внутри View проекта типа ASP.NET MVC 
-
-
 <div class="col-md-12 table object" style="border: 1px solid #4F7199; padding-bottom:10px;">
     <div class="row">
-        <div class="col-md-12 FiNumber">ФИ -@Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.CreditLineNumberr</div> // содержание этого нужно 
+        <div class="col-md-12 FiNumber">ФИ -@Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.CreditLineNumber</div> // содержание этого нужно 
     </div>
 
     <div class="col-md-2 pull-right">
