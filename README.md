@@ -3,7 +3,7 @@
 
 <div class="col-md-12 table object" style="border: 1px solid #4F7199; padding-bottom:10px;">
     <div class="row">
-        <div class="col-md-12 FiNumber">ФИ - @Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.CreditLineNumber@Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.TranshNumber@Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.OBZNumber@Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.BTGNumber</div> // содержание этого нужно 
+        <div class="col-md-12 FiNumber">ФИ -@Model.BaseClaFinInstrument[Model.index].ClaApprovedConditionInfo.CreditLineNumberr</div> // содержание этого нужно 
     </div>
 
     <div class="col-md-2 pull-right">
