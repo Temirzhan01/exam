@@ -11,31 +11,3 @@
         }
     </div>
 </div>
-
-
-    $(document).on("click", ".AddUnderLimitFinIns", function () {
-        $("#BaseClaCommisAccInfo_CommisAccNum").attr("disabled", "disabled");
-        $(".CommisAmount").attr("disabled", "disabled");
-
-        if ($("#DataCollection").valid()) {
-            var target = $(this);
-            var data = new Object();
-            data.value = target.closest(".FiNumber").val();
-
-            target.closest("#StartFinInsturment").find(".table").removeAttr("hidden");
-            target.closest("#StartFinInsturment").find(".IsStateProgram").prop("checked", false);
-            target.removeClass("margin-top-10");
-            target.closest(".clearfix").find(".StateProgramm").attr("hidden", "hidden");
-
-            $.get("/" + base_url + "/Base/AddFinInstrumentKMCLUnderLimit", data, function (partial) {
-                $("#BaseClaCommisAccInfo_CommisAccNum").removeAttr("disabled");
-                $(".CommisAmount").removeAttr("disabled");
-                $(document).find("#GesvObjects").append(partial);
-            });
-        }
-        else {
-            alert("Заполните пожалуйста все обязательные поля и все условия!!!");
-            $("#BaseClaCommisAccInfo_CommisAccNum").removeAttr("disabled");
-            $(".CommisAmount").removeAttr("disabled");
-        }
-    });
