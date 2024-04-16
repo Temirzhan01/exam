@@ -1,4 +1,4 @@
-<div class="col-md-12 table object" style="border: 1px solid #4F7199; padding-bottom:10px;">
+<div class="col-md-12 table object">
     <div class="row">
         <div class="col-md-12 FiNumber"></div> // содержание этого нужно 
     </div>
