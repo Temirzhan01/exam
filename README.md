@@ -1,21 +1,13 @@
-using LegalCashOperationsWorker;
-
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+{
+    var config = new ConsumerConfig { BootstrapServers = _kafkaSettings.BootstrapServers, GroupId = _kafkaSettings.GroupId };
+    using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
     {
-        services.AddHostedService<Worker>();
-    })
-    .Build();
-
-await host.RunAsync();
-
-Вот какой дефолтный мне сгенерил vs
-
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File(new ElasticsearchJsonFormatter(), "logs/.log",
-    rollingInterval: RollingInterval.Day,
-    rollOnFileSizeLimit: true,
-    fileSizeLimitBytes: 10000000)
-.CreateLogger();  Конфигурации мне не нужны для логера, достаточно такой логер 
+        consumer.Subscribe(_kafkaSettings.Topic);
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            var consumeResult = consumer.Consume(stoppingToken);
+            // Обработка сообщения
+        }
+    }
+}
