@@ -1,28 +1,65 @@
-            "description": "Discover endpoint #0 is not responding with code in 200...299 range, the current status is Forbidden." Хотя ендпоинт ошибку не выдает
+using Confluent.Kafka;
+using LegalCashOperationsWorker.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using System.Text;
 
+namespace LegalCashOperationsWorker
+{
+    public class Worker : BackgroundService
+    {
+        private readonly ILogger<Worker> _logger;
+        private readonly HttpClient _camundaClient;
+        private readonly ConsumerConfig _consumerConfig;
+        private readonly string _topic;
 
-        private readonly ITrancheRepository _transhRepository;
-        private readonly HttpClient _colvirClient;
-        private readonly ILogger<TrancheService> _logger;
-        private readonly IMapper _mapper;
-        private readonly GetFinToolDocsMSBSoapClient HDDClient;
-
-        public TrancheService(ITrancheRepository transhRepository, IHttpClientFactory httpClientFactory, ILogger<TrancheService> logger, IMapper mapper, IOptions<ExternalServices> options)
+        public Worker(ILogger<Worker> logger, IHttpClientFactory factory, IOptions<KafkaSettings> options, string topic)
         {
-            _transhRepository = transhRepository;
-            _colvirClient = httpClientFactory.CreateClient("Colvir");
+            _camundaClient = factory.CreateClient("Camunda");
             _logger = logger;
-            _mapper = mapper;
-            HDDClient = new GetFinToolDocsMSBSoapClient();
-            HDDClient.Endpoint.Address = new System.ServiceModel.EndpointAddress(options.Value.HHDSoapService);
-        }
-        
-        public async Task<IEnumerable<Models.Document>> GetDocumentsFromHDDAsync(string branchNumber)
-        {
-            using (HDDClient)
+            _consumerConfig = new ConsumerConfig()
             {
-                var hddDocs = await HDDClient.GetFinToolDocsAsync(branchNumber);
-                var result = _mapper.Map<Models.Document[]>(hddDocs.Body.GetFinToolDocsResult.Documents);
-                return result;
+                GroupId = options.Value.GroupId,
+                BootstrapServers = options.Value.BootstrapServers,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SaslMechanism = SaslMechanism.ScramSha256,
+                SaslUsername = options.Value.SaslUsername,
+                SaslPassword = options.Value.SaslPassword,
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                EnableSslCertificateVerification = false,
+                EnableAutoCommit = false,
+                EnableAutoOffsetStore = true
+            };
+            _topic = topic;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            using (var consumer = new ConsumerBuilder<Ignore, string>(_consumerConfig).Build())
+            {
+                consumer.Subscribe(_topic);
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    var consumeResult = consumer.Consume(stoppingToken);
+                    _logger.LogInformation(consumeResult.Message.Value);
+                    var data = JsonConvert.DeserializeObject<OperatinData>(consumeResult.Message.Value);
+                    if (data != null)
+                    {
+                        await StartProcess(data);
+                    }
+                }
             }
         }
+
+        public async Task StartProcess(OperatinData operatinData) 
+        {
+            using (_camundaClient) 
+            {
+                var response = await _camundaClient.SendAsync(new HttpRequestMessage() { Method = HttpMethod.Post, Content = new StringContent(JsonConvert.SerializeObject(operatinData), Encoding.UTF8, "application/json" ) });
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+    }
+}
