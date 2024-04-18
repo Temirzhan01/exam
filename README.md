@@ -1,51 +1,91 @@
-using Confluent.Kafka;
-using LegalCashOperationsWorker.Models;
-using Microsoft.Extensions.Options;
-
-namespace LegalCashOperationsWorker
-{
-    public class Worker : BackgroundService
+Смотри тут есть у меня класс для внешних сервисов, их может быть намного больше
+    public class ExternalServices
     {
-        private readonly ILogger<Worker> _logger;
-        private readonly HttpClient _camundaClient;
-        private readonly ConsumerConfig _consumerConfig;
-        private readonly string _topic;
+        public string Colvir { get; set; }
+        public string HHDSoapService { get; set; }
+    }
+  "ExternalServices": {
+    "HHDSoapService": "",
+    "Colvir": ""
+  },
+Я хочу добавить хелзчек, типа такого 
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SPM3._0Service.Data;
 
-        public Worker(ILogger<Worker> logger, IHttpClientFactory factory, IOptions<KafkaSettings> options, string topic)
+namespace SPM3._0Service.Extensions.HealthChecks
+{
+    public class OracleDbHealthCheck : IHealthCheck
+    {
+        private readonly OracleDbContext _context;
+
+        public OracleDbHealthCheck(OracleDbContext context)
         {
-            _camundaClient = factory.CreateClient("Camunda");
-            _logger = logger;
-            _consumerConfig = new ConsumerConfig()
-            {
-                GroupId = options.Value.GroupId,
-                BootstrapServers = options.Value.BootstrapServers,
-                SecurityProtocol = SecurityProtocol.SaslSsl,
-                SaslMechanism = SaslMechanism.ScramSha256,
-                SaslUsername = options.Value.SaslUsername,
-                SaslPassword = options.Value.SaslPassword,
-                AutoOffsetReset = AutoOffsetReset.Earliest,
-                EnableSslCertificateVerification = false,
-                EnableAutoCommit = false,
-                EnableAutoOffsetStore = true
-            };
-            _topic = topic;
+            _context = context;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            using (var consumer = new ConsumerBuilder<Ignore, string>(_consumerConfig).Build())
+            try
             {
-                consumer.Subscribe(_topic);
-                while (!stoppingToken.IsCancellationRequested)
+                bool status = await _context.Database.CanConnectAsync(cancellationToken);
+                if (status)
                 {
-                    var consumeResult = consumer.Consume(stoppingToken);
+                    return HealthCheckResult.Healthy("Database connection is OK");
                 }
+                else return HealthCheckResult.Unhealthy("Database connection failed");
+            }
+            catch (Exception ex)
+            {
+                return HealthCheckResult.Unhealthy("Database check failed", ex);
             }
         }
-
     }
 }
 
-Severity	Code	Description	Project	File	Line	Suppression State
-Error	CS0051	Inconsistent accessibility: parameter type 'IOptions<KafkaSettings>' is less accessible than method 'Worker.Worker(ILogger<Worker>, IHttpClientFactory, IOptions<KafkaSettings>, string)'	LegalCashOperationsWorker	D:\source\repos\CustomServices\LegalCashOperationsWorker\Worker.cs	14	Active
-Получаю такую оишбку? что делать:
+app.MapHealthChecks("/healthz", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var response = new
+        {
+            status = report.Status.ToString(),
+            errors = report.Entries.Select(x => new { key = x.Key, value = x.Value.Description ?? x.Value.Exception?.Message }).Where(x => x.value != null)
+        };
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+    }
+});
+
+Или такого 
+using Core6ApiTemplate.Api.HealthChecks;
+
+namespace Core6ApiTemplate.Api.Extensions
+{
+    public static class HealthCheckExtension
+    {
+        public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            foreach (var uri in configuration.GetSection("Uris").AsEnumerable(makePathsRelative: true))
+            {
+                services.AddHealthChecks().AddUrlGroup(new Uri(uri.Value ?? ""), name: uri.Key);
+            }
+
+            services.AddHealthChecks()
+                .AddOracle(configuration.GetConnectionString("spm") ?? "", name: "spm")
+                .AddCheck<CustomHealthCheck>(nameof(CustomHealthCheck));
+
+            // AspNetCore.HealthChecks.Consul       6.0.2   .AddConsul()
+            // AspNetCore.HealthChecks.SqlServer    6.0.2   .AddSQLServer()
+            // AspNetCore.HealthChecks.Npgsql       6.0.2   .AddNpgSql()
+            // AspNetCore.HealthChecks.Kafka        6.0.2   .AddKafka()
+            // AspNetCore.HealthChecks.Redis        6.0.2   .AddRedis()
+            // AspNetCore.HealthChecks.RabbitMQ     6.0.2   .AddRabbitMQ()
+
+            return services;
+        }
+    }
+}
+
+
+И хочу чтобы, мой хелзчек проходился по всем юрлам и проверял на доступность.
+Какой лучше всего? 
