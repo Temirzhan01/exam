@@ -1,91 +1,51 @@
-Смотри тут есть у меня класс для внешних сервисов, их может быть намного больше
-    public class ExternalServices
-    {
-        public string Colvir { get; set; }
-        public string HHDSoapService { get; set; }
-    }
-  "ExternalServices": {
-    "HHDSoapService": "",
-    "Colvir": ""
-  },
-Я хочу добавить хелзчек, типа такого 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SPM3._0Service.Data;
+using Microsoft.Extensions.Configuration;
+using System;
 
-namespace SPM3._0Service.Extensions.HealthChecks
+namespace YourNamespace
 {
-    public class OracleDbHealthCheck : IHealthCheck
+    public static class HealthCheckExtensions
     {
-        private readonly OracleDbContext _context;
-
-        public OracleDbHealthCheck(OracleDbContext context)
+        public static IServiceCollection AddExternalServiceHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
-            _context = context;
-        }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            // Получаем секцию с внешними сервисами как словарь
+            var externalServices = configuration.GetSection("ExternalServices").Get<Dictionary<string, string>>();
+            foreach (var service in externalServices)
             {
-                bool status = await _context.Database.CanConnectAsync(cancellationToken);
-                if (status)
+                string name = service.Key; // Название сервиса, например "HHDSoapService"
+                string url = service.Value; // URL сервиса
+
+                if (!string.IsNullOrWhiteSpace(url))
                 {
-                    return HealthCheckResult.Healthy("Database connection is OK");
+                    // Добавляем health check для каждого URL
+                    services.AddHealthChecks().AddUrlGroup(new Uri(url), name: name);
                 }
-                else return HealthCheckResult.Unhealthy("Database connection failed");
             }
-            catch (Exception ex)
-            {
-                return HealthCheckResult.Unhealthy("Database check failed", ex);
-            }
-        }
-    }
-}
-
-app.MapHealthChecks("/healthz", new HealthCheckOptions
-{
-    ResponseWriter = async (context, report) =>
-    {
-        context.Response.ContentType = "application/json";
-        var response = new
-        {
-            status = report.Status.ToString(),
-            errors = report.Entries.Select(x => new { key = x.Key, value = x.Value.Description ?? x.Value.Exception?.Message }).Where(x => x.value != null)
-        };
-        await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-    }
-});
-
-Или такого 
-using Core6ApiTemplate.Api.HealthChecks;
-
-namespace Core6ApiTemplate.Api.Extensions
-{
-    public static class HealthCheckExtension
-    {
-        public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
-        {
-            foreach (var uri in configuration.GetSection("Uris").AsEnumerable(makePathsRelative: true))
-            {
-                services.AddHealthChecks().AddUrlGroup(new Uri(uri.Value ?? ""), name: uri.Key);
-            }
-
-            services.AddHealthChecks()
-                .AddOracle(configuration.GetConnectionString("spm") ?? "", name: "spm")
-                .AddCheck<CustomHealthCheck>(nameof(CustomHealthCheck));
-
-            // AspNetCore.HealthChecks.Consul       6.0.2   .AddConsul()
-            // AspNetCore.HealthChecks.SqlServer    6.0.2   .AddSQLServer()
-            // AspNetCore.HealthChecks.Npgsql       6.0.2   .AddNpgSql()
-            // AspNetCore.HealthChecks.Kafka        6.0.2   .AddKafka()
-            // AspNetCore.HealthChecks.Redis        6.0.2   .AddRedis()
-            // AspNetCore.HealthChecks.RabbitMQ     6.0.2   .AddRabbitMQ()
 
             return services;
         }
     }
 }
 
+var builder = WebApplication.CreateBuilder(args);
 
-И хочу чтобы, мой хелзчек проходился по всем юрлам и проверял на доступность.
-Какой лучше всего? 
+// Добавление health checks для внешних сервисов
+builder.Services.AddExternalServiceHealthChecks(builder.Configuration);
+
+var app = builder.Build();
+
+// Конфигурация маршрута для health checks
+app.MapHealthChecks("/health", new HealthCheckOptions {
+    ResponseWriter = async (context, report) => {
+        context.Response.ContentType = "application/json";
+        var result = new {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(x => new { name = x.Key, response = x.Value.Status.ToString(), description = x.Value.Description })
+        };
+        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(result));
+    }
+});
+
+app.Run();
+
