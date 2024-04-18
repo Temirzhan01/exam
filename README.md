@@ -1,30 +1,62 @@
-using LegalCashOperationsWorker;
+using Confluent.Kafka;
 using LegalCashOperationsWorker.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Serilog;
-using Serilog.Formatting.Elasticsearch;
+using Newtonsoft.Json;
+using System.Text;
 
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.File(new ElasticsearchJsonFormatter(), "logs/.log",
-    rollingInterval: RollingInterval.Day,
-    rollOnFileSizeLimit: true,
-    fileSizeLimitBytes: 10000000)
-.CreateLogger();
-
-IHost host = Host.CreateDefaultBuilder(args)
-    .UseSerilog()
-    .ConfigureServices((hostContext, services) =>
+namespace LegalCashOperationsWorker
+{
+    public class Worker : BackgroundService
     {
-        IConfiguration configuration = hostContext.Configuration;
-        services.AddHostedService<Worker>();
-        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.Configure<ExternalServices>(configuration.GetSection("ExternalServices"));
-        services.AddHttpClient("Camunda", (serviceProvider, client) =>
-        {
-            client.BaseAddress = new Uri(serviceProvider.GetRequiredService<IOptions<ExternalServices>>().Value.Camunda);
-        });
-    })
-    .Build();
+        private readonly ILogger<Worker> _logger;
+        private readonly HttpClient _camundaClient;
+        private readonly ConsumerConfig _consumerConfig;
+        private readonly string _topic;
 
-await host.RunAsync();
+        public Worker(ILogger<Worker> logger, IHttpClientFactory factory, IOptions<KafkaSettings> options)
+        {
+            _camundaClient = factory.CreateClient("Camunda");
+            _logger = logger;
+            _consumerConfig = new ConsumerConfig()
+            {
+                GroupId = options.Value.GroupId,
+                BootstrapServers = options.Value.BootstrapServers,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SaslMechanism = SaslMechanism.ScramSha256,
+                SaslUsername = options.Value.SaslUsername,
+                SaslPassword = options.Value.SaslPassword,
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                EnableSslCertificateVerification = false,
+                EnableAutoCommit = false,
+                EnableAutoOffsetStore = true
+            };
+            _topic = options.Value.Topic;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            using (var consumer = new ConsumerBuilder<Ignore, string>(_consumerConfig).Build())
+            {
+                consumer.Subscribe(_topic);
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    var consumeResult = consumer.Consume(stoppingToken);
+                    _logger.LogInformation(consumeResult.Message.Value);
+                    var data = JsonConvert.DeserializeObject<OperatinData>(consumeResult.Message.Value);
+                    if (data != null)
+                    {
+                        await StartProcess(data);
+                    }
+                }
+            }
+        }
+
+        public async Task StartProcess(OperatinData operatinData) 
+        {
+            var response = await _camundaClient.SendAsync(new HttpRequestMessage() { Method = HttpMethod.Post, Content = new StringContent(JsonConvert.SerializeObject(operatinData), Encoding.UTF8, "application/json") });
+            response.EnsureSuccessStatusCode(); // он тут падает
+        }
+
+    }
+}
