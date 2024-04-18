@@ -1,51 +1,28 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Configuration;
-using System;
+            "description": "Discover endpoint #0 is not responding with code in 200...299 range, the current status is Forbidden." Хотя ендпоинт ошибку не выдает
 
-namespace YourNamespace
-{
-    public static class HealthCheckExtensions
-    {
-        public static IServiceCollection AddExternalServiceHealthChecks(this IServiceCollection services, IConfiguration configuration)
+
+        private readonly ITrancheRepository _transhRepository;
+        private readonly HttpClient _colvirClient;
+        private readonly ILogger<TrancheService> _logger;
+        private readonly IMapper _mapper;
+        private readonly GetFinToolDocsMSBSoapClient HDDClient;
+
+        public TrancheService(ITrancheRepository transhRepository, IHttpClientFactory httpClientFactory, ILogger<TrancheService> logger, IMapper mapper, IOptions<ExternalServices> options)
         {
-            // Получаем секцию с внешними сервисами как словарь
-            var externalServices = configuration.GetSection("ExternalServices").Get<Dictionary<string, string>>();
-            foreach (var service in externalServices)
-            {
-                string name = service.Key; // Название сервиса, например "HHDSoapService"
-                string url = service.Value; // URL сервиса
-
-                if (!string.IsNullOrWhiteSpace(url))
-                {
-                    // Добавляем health check для каждого URL
-                    services.AddHealthChecks().AddUrlGroup(new Uri(url), name: name);
-                }
-            }
-
-            return services;
+            _transhRepository = transhRepository;
+            _colvirClient = httpClientFactory.CreateClient("Colvir");
+            _logger = logger;
+            _mapper = mapper;
+            HDDClient = new GetFinToolDocsMSBSoapClient();
+            HDDClient.Endpoint.Address = new System.ServiceModel.EndpointAddress(options.Value.HHDSoapService);
         }
-    }
-}
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Добавление health checks для внешних сервисов
-builder.Services.AddExternalServiceHealthChecks(builder.Configuration);
-
-var app = builder.Build();
-
-// Конфигурация маршрута для health checks
-app.MapHealthChecks("/health", new HealthCheckOptions {
-    ResponseWriter = async (context, report) => {
-        context.Response.ContentType = "application/json";
-        var result = new {
-            status = report.Status.ToString(),
-            checks = report.Entries.Select(x => new { name = x.Key, response = x.Value.Status.ToString(), description = x.Value.Description })
-        };
-        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(result));
-    }
-});
-
-app.Run();
-
+        
+        public async Task<IEnumerable<Models.Document>> GetDocumentsFromHDDAsync(string branchNumber)
+        {
+            using (HDDClient)
+            {
+                var hddDocs = await HDDClient.GetFinToolDocsAsync(branchNumber);
+                var result = _mapper.Map<Models.Document[]>(hddDocs.Body.GetFinToolDocsResult.Documents);
+                return result;
+            }
+        }
