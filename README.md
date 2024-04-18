@@ -1,5 +1,20 @@
-Severity	Code	Description	Project	File	Line	Suppression State
-Error	MSB3027	Could not copy "D:\source\repos\CustomServices\LegalCashOperationsWorker\obj\Debug\net6.0\apphost.exe" to "bin\Debug\net6.0\LegalCashOperationsWorker.exe". Exceeded retry count of 10. Failed. The file is locked by: "LegalCashOperationsWorker (32580)"	LegalCashOperationsWorker	C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets	5198	
+System.AggregateException
+  HResult=0x80131500
+  Message=Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: Microsoft.Extensions.Hosting.IHostedService Lifetime: Singleton ImplementationType: LegalCashOperationsWorker.Worker': Unable to resolve service for type 'System.String' while attempting to activate 'LegalCashOperationsWorker.Worker'.)
+  Source=Microsoft.Extensions.DependencyInjection
+  StackTrace:
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at Program.<<Main>$>d__0.MoveNext() in D:\source\repos\CustomServices\LegalCashOperationsWorker\Program.cs:line 15
 
-Severity	Code	Description	Project	File	Line	Suppression State
-Error	MSB3021	Unable to copy file "D:\source\repos\CustomServices\LegalCashOperationsWorker\obj\Debug\net6.0\apphost.exe" to "bin\Debug\net6.0\LegalCashOperationsWorker.exe". The process cannot access the file 'bin\Debug\net6.0\LegalCashOperationsWorker.exe' because it is being used by another process.	LegalCashOperationsWorker	C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets	5198	
+  This exception was originally thrown at this call stack:
+    [External Code]
+
+Inner Exception 1:
+InvalidOperationException: Error while validating the service descriptor 'ServiceType: Microsoft.Extensions.Hosting.IHostedService Lifetime: Singleton ImplementationType: LegalCashOperationsWorker.Worker': Unable to resolve service for type 'System.String' while attempting to activate 'LegalCashOperationsWorker.Worker'.
+
+Inner Exception 2:
+InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'LegalCashOperationsWorker.Worker'.
