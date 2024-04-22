@@ -1,3 +1,1 @@
-string original = "2131513/1513";
-int lastIndex = original.LastIndexOf('/');
-string result = (lastIndex >= 0) ? original.Remove(lastIndex, 1) : original;
+                var httpPostedFile = HttpContext.Request.Files["UploadedImage"]; Мы тут загружает документ, и нам необходимо ограничит размер загружаемого файла, условно до 10 мб, как это сделать? 
