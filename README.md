@@ -1,32 +1,51 @@
-    $(document).on("change", ":file", function () {
-            var data = new FormData();
-            var files = $(this).get(0).files;
-            if (files.length > 0) {
-                data.append("UploadedImage", files[0]);
-            }
-            data.append("guid", $(this).attr("guid"));
-            data.append("contractNumber", $(".ContractNumber").html());
-            var target = $(this);
-            target.closest(".File").find(".uploadBlock").hide();
-            target.closest(".File").find(".loading").show();
-            var prefix = $(".Url").html();
-            var ajaxRequest = $.ajax({
-                type: "POST",
-                url: prefix + "/MSBDocumentsPocket/UploadFile",
-                contentType: false,
-                processData: false,
-                data: data
-            });
-            ajaxRequest.done(function (xhr, textStatus) {
-                target.closest(".File").find(".loading").hide();
-                if (textStatus == "success" && xhr == "OK") {
-                    target.closest(".File").find(".loading").hide();
-                    target.closest(".File").find(".download").show();
-                }
-                else {
-                    target.closest(".File").find(".loading").hide();
-                    target.closest(".File").find(".uploadBlock").show();
-                    alert(xhr);
-                }
-            });
-    });
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AppSettings": {
+    "ExternalServices": {
+      "Camunda": ""
+    },
+    "Kafka": {
+      "Topic": "",
+      "GroupId": "",
+      "BootstrapServers": "",
+      "SaslUsername": "",
+      "SaslPassword": ""
+    },
+    "BKGeneratorType": "",
+    "ProcessName": "",
+    "Classes": ""  //как сюда вставлять массив стрингов? типа ["str1","str2"]?
+  }
+}
+
+
+namespace LegalCashOperationsWorker.Models
+{
+    public class AppSettings 
+    {
+        public KafkaSettings KafkaSettings { get; set; }
+        public ExternalServices ExternalServices { get; set; }
+        public string BKGeneratorType { get; set; }
+        public string ProcessName { get; set; }
+        public string[] Classes { get; set; }
+    }
+
+    public class KafkaSettings
+    {
+        public string Topic { get; set; }
+        public string GroupId { get; set; }
+        public string BootstrapServers { get; set; }
+        public string SaslUsername { get; set; }
+        public string SaslPassword { get; set; }
+    }
+
+    public class ExternalServices
+    {
+        public string Camunda {  get; set; }
+    }
+
+}
