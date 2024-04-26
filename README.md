@@ -1,3 +1,5 @@
+                @for (int i = 0; i < Model.BaseClaFinInstrument.Count; i++)
+                {
                     <div class="ClaGesv">
                         @Html.Partial("ClaGesv", new CLAMB.ViewModels.ClaFinInstrumentInfoViewModel
                            {
@@ -6,6 +8,7 @@
                                BaseClaCommisAccInfo = Model.BaseClaCommisAccInfo
                            })
                     </div>
+                }
 
 
 $(document).on("click", "#SaveStateProgram", function () {
