@@ -1,28 +1,21 @@
+            <div class="clearfix margin-top-10" id="GesvObjects">
                 @for (int i = 0; i < Model.BaseClaFinInstrument.Count; i++)
                 {
-                    <div class="ClaGesv">
-                        @Html.Partial("ClaGesv", new CLAMB.ViewModels.ClaFinInstrumentInfoViewModel
-                           {
-                               BaseClaFinInstrument = Model.BaseClaFinInstrument,
-                               index = i,
-                               BaseClaCommisAccInfo = Model.BaseClaCommisAccInfo
-                           })
+                    <div id="ClaGesvs-@i" class="ClaGesv"> Почему это отображается как внизу на странице? 
+                       @Html.Partial("ClaGesv", new CLAMB.ViewModels.ClaFinInstrumentInfoViewModel
+                       {
+                           BaseClaFinInstrument = Model.BaseClaFinInstrument,
+                           index = i,
+                           BaseClaCommisAccInfo = Model.BaseClaCommisAccInfo
+                       })
                     </div>
                 }
+            </div>
 
 
-$(document).on("click", "#SaveStateProgram", function () {
-        var data = new Object();
-        var target = $(this)
-        data.fiId = target.closest(".ClaGesvObject").index();
-        data.stateProgramType = target.closest(".ClaGesvObject").find(".StateProgram_StateProgramType").val();
-        data.stateSupportType = target.closest(".ClaGesvObject").find(".StateProgram_StateSupportType").val();
-
-        target.closest(".ClaGesvObject").find(".StateProgram").attr("hidden", "hidden");
-        target.closest(".ClaGesvObject").find(".IsStateProgram").prop("checked", false);
-
-        $.get("/" + base_url + "/Base/SaveStateProgram", data, function (partial) {
-            target.closest(".ClaGesv").html(partial);
-            target.closest("#StartFinInsturment").find(".table").removeAttr("hidden");
-        });
-    });
+            <div class="clearfix margin-top-10" id="GesvObjects">
+                    <div id="ClaGesvs-0"></div>
+                    <div id="ClaGesvs-1"></div> 
+                    <div class="col-md-12 table object ClaGesvObject" style="border: 1px solid #4F7199; padding-bottom:10px;"></div>
+                    <div class="col-md-12 table object ClaGesvObject" style="border: 1px solid #4F7199; padding-bottom:10px;"></div>
+           </div> 
