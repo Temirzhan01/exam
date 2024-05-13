@@ -1,97 +1,50 @@
-appsettings.json:
+[14:33:54 INF] Hosting environment: Development
+
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
+using Serilog;
+using Serilog.Formatting.Elasticsearch;
+using SPM3._0Service.Extensions;
+using SPM3._0Service.Extensions.CustomMiddlewares;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServices();
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(new ElasticsearchJsonFormatter(), "logs/.log",
+    rollingInterval: RollingInterval.Day,
+    rollOnFileSizeLimit: true,
+    fileSizeLimitBytes: 10000000)
+.CreateLogger();
+
+builder.Host.UseSerilog();
+
+var app = builder.Build();
+
+app.MapHealthChecks("/healthz", new HealthCheckOptions
 {
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
+    ResponseWriter = async (context, report) => {
+        context.Response.ContentType = "application/json";
+        var result = new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(x => new { name = x.Key, response = x.Value.Status.ToString(), description = x.Value.Description })
+        };
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(result));
     }
-  },
-  "ConnectionStrings": {
-    "Cardcolv": ""
-  },
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft": "Error",
-        "System": "Warning"
-      }
-    }
-  },
-  "ExternalServices": {
-    "HHDSoapService": "",
-    "Colvir": ""
-  },
-  "AllowedHosts": "*",
-  "ApiKey": ""
+});
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-appsettings.Development.json:
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=ala720i01.halykbank.nb)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=SPMDEV)));User Id=cardcolv;Password=t1est34"
-  },
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft": "Error",
-        "System": "Warning"
-      }
-    }
-  },
-  "ExternalServices": {
-    "HHDSoapService": "http://IRIS2A001.test.dev:57772/csp/hddmain/Service.GetFinToolDocsMSB.cls",
-    "Colvir": "http://colvirbs-credits.service.test-dc.consul"
-  },
-  "AllowedHosts": "*",
-  "ApiKey": {
-    "DefaultKey": "DefaultKey"
-  }
-}
+app.UseMiddleware<ApiKeyMiddleware>();
 
-launchSettings.json:
-{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:50584",
-      "sslPort": 44376
-    }
-  },
-  "profiles": {
-    "SPM3._0Service": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:7230;http://localhost:5230",
-      "dotnetRunMessages": true
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "publishAllPorts": true,
-      "useSSL": true
-    }
-  }
-}
+app.MapControllers();
+
+app.Run();
