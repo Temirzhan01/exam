@@ -1,41 +1,11 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-
-ENV TZ=Asia/Almaty
-ENV ASPNETCORE_ENVIRONMENT=Development
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone 
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["LegalCashOperationsWorker.csproj", "."]
-RUN dotnet restore "./LegalCashOperationsWorker.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "LegalCashOperationsWorker.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "LegalCashOperationsWorker.csproj" -c Release -o /app/publish
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LegalCashOperationsWorker.dll"]
-
-
-{
-  "profiles": {
-    "LegalCashOperationsWorker": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "useSSL": true
-    }
-  }
-}
+2024-05-14 20:11:03 HOSTNAME=d8c06f676c30
+2024-05-14 20:11:03 HOME=/root
+2024-05-14 20:11:03 DOTNET_RUNNING_IN_CONTAINER=true
+2024-05-14 20:11:03 DOTNET_VERSION=6.0.29
+2024-05-14 20:11:03 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+2024-05-14 20:11:03 ASPNETCORE_URLS=http://+:80
+2024-05-14 20:11:03 PWD=/app
+2024-05-14 20:11:03 TZ=Asia/Almaty
+2024-05-14 20:11:03 ASPNET_VERSION=6.0.29
+2024-05-14 20:11:03 ASPNETCORE_ENVIRONMENT=
+2024-05-14 20:11:03 ASPNETCORE_ENVIRONMENT: Production
