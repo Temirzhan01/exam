@@ -1,39 +1,5 @@
-Смотри у меня тут есть воркер.
+ExecuteAsync error: sasl.username and sasl.password must be set .net 6
 
-Program.cs:
-
-using LegalCashOperationsWorker;
-using LegalCashOperationsWorker.Models;
-using Microsoft.Extensions.Options;
-using Serilog;
-using Serilog.Formatting.Elasticsearch;
-
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File(new ElasticsearchJsonFormatter(), "logs/.log",
-    rollingInterval: RollingInterval.Day,
-    rollOnFileSizeLimit: true,
-    fileSizeLimitBytes: 10000000)
-.CreateLogger();
-
-IHost host = Host.CreateDefaultBuilder(args)
-    .UseSerilog()
-    .ConfigureServices((hostContext, services) =>
-    {
-        IConfiguration configuration = hostContext.Configuration;
-        services.AddHostedService<Worker>();
-        services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
-        services.AddHttpClient("Camunda", (serviceProvider, client) =>
-        {
-            client.BaseAddress = new Uri(serviceProvider.GetRequiredService<IOptions<AppSettings>>().Value.ExternalServices.Camunda);
-        });
-    })
-    .Build();
-
-await host.RunAsync();
-
-Worker.cs:
 using Confluent.Kafka;
 using LegalCashOperationsWorker.Models;
 using Microsoft.Extensions.Options;
@@ -68,6 +34,7 @@ namespace LegalCashOperationsWorker
                 EnableAutoCommit = false,
                 EnableAutoOffsetStore = true
             };
+            Console.WriteLine(JsonConvert.SerializeObject(_consumerConfig));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -80,7 +47,7 @@ namespace LegalCashOperationsWorker
                     {
                         consumer.Subscribe(_options.Value.KafkaSettings.Topic);
                         var consumeResult = consumer.Consume(stoppingToken);
-                        _logger.LogInformation(consumeResult.Message.Value);
+                        //_logger.LogInformation(consumeResult.Message.Value);
                         consumer.Commit();
                         consumer.Close();
                         var data = JsonConvert.DeserializeObject<OperatinData>(consumeResult.Message.Value);
@@ -137,5 +104,91 @@ namespace LegalCashOperationsWorker
     }
 }
 
+using LegalCashOperationsWorker;
+using LegalCashOperationsWorker.Models;
+using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Formatting.Elasticsearch;
 
-локально все работает корректно, но на сервере нет и жрет много оперативной памяти, почему может быть? 
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(new ElasticsearchJsonFormatter(), "logs/.log",
+    rollingInterval: RollingInterval.Day,
+    rollOnFileSizeLimit: true,
+    fileSizeLimitBytes: 10000000)
+.CreateLogger();
+
+IHost host = Host.CreateDefaultBuilder(args)
+    .UseSerilog()
+    .ConfigureServices((hostContext, services) =>
+    {
+        IConfiguration configuration = hostContext.Configuration;
+        services.AddHostedService<Worker>();
+        services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+        services.AddHttpClient("Camunda", (serviceProvider, client) =>
+        {
+            client.BaseAddress = new Uri(serviceProvider.GetRequiredService<IOptions<AppSettings>>().Value.ExternalServices.Camunda);
+        });
+    })
+    .Build();
+
+await host.RunAsync();
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+ENV TZ=Asia/Almaty
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone 
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["LegalCashOperationsWorker.csproj", "."]
+RUN dotnet restore "./LegalCashOperationsWorker.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "LegalCashOperationsWorker.csproj" -c Release -o /app/build
+FROM build AS publish
+RUN dotnet publish "LegalCashOperationsWorker.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "LegalCashOperationsWorker.dll"]
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Error",
+        "System": "Warning"
+      }
+    }
+  },
+  "AppSettings": {
+    "ExternalServices": {
+      "Camunda": "https://halykbpm-dev-core.homebank.kz/"
+    },
+    "KafkaSettings": {
+      "Topic": "ourtopic",
+      "GroupId": "ourgroup",
+      "BootstrapServers": "ourservers",
+      "SaslUsername": "ourusername",
+      "SaslPassword": "ourpassword"
+    },
+    "BKGeneratorType": "LCO",
+    "ProcessName": "legalCashOperations"
+  }
+}
+
+ Вся эта хуета, работает локально, это воркер который консьюмит
