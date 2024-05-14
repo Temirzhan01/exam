@@ -1,17 +1,9 @@
-2024-05-14 18:50:36 You must install or update .NET to run this application.
-2024-05-14 18:50:36 
-2024-05-14 18:50:36 App: /app/LegalCashOperationsWorker.dll
-2024-05-14 18:50:36 Architecture: x64
-2024-05-14 18:50:36 Framework: 'Microsoft.AspNetCore.App', version '6.0.0' (x64)
-2024-05-14 18:50:36 .NET location: /usr/share/dotnet/
-2024-05-14 18:50:36 
-2024-05-14 18:50:36 No frameworks were found.
-2024-05-14 18:50:36 
-2024-05-14 18:50:36 Learn about framework resolution:
-2024-05-14 18:50:36 https://aka.ms/dotnet/app-launch-failed
-2024-05-14 18:50:36 
-2024-05-14 18:50:36 To install missing framework, download:
-2024-05-14 18:50:36 https://aka.ms/dotnet-core-applaunch?framework=Microsoft.AspNetCore.App&framework_version=6.0.0&arch=x64&rid=debian.11-x64
+                    _logger.LogInformation(JsonConvert.SerializeObject(_consumerConfig));
+
+                SaslPassword = options.Value.KafkaSettings.SaslPassword,
+              Если передаю так ошибку получаю, 
+              {"@timestamp":"2024-05-14T19:06:54.9312570+05:00","level":"Error","messageTemplate":"ExecuteAsync error: sasl.username and sasl.password must be set","message":"ExecuteAsync error: sasl.username and sasl.password must be set","fields":{"SourceContext":"LegalCashOperationsWorker.Worker"}}
+{"@timestamp":"2024-05-14T19:06:54.9326736+05:00","level":"Information","messageTemplate":"[{\"Key\":\"group.id\",\"Value\":\"BPMLCOGR\"},{\"Key\":\"bootstrap.servers\",\"Value\":\"kaftestn1.halykbank.nb:9093,kaftestn2.halykbank.nb:9093,kaftestn3.halykbank.nb:9093\"},{\"Key\":\"security.protocol\",\"Value\":\"sasl_ssl\"},{\"Key\":\"sasl.mechanism\",\"Value\":\"SCRAM-SHA-256\"},{\"Key\":\"sasl.username\",\"Value\":\"bpmLCOUser\"},{\"Key\":\"sasl.password\",\"Value\":\"\"},{\"Key\":\"auto.offset.reset\",\"Value\":\"earliest\"},{\"Key\":\"enable.ssl.certificate.verification\",\"Value\":\"False\"},{\"Key\":\"enable.auto.commit\",\"Value\":\"False\"},{\"Key\":\"enable.auto.offset.store\",\"Value\":\"True\"}]","message":"[{\"Key\":\"group.id\",\"Value\":\"BPMLCOGR\"},{\"Key\":\"bootstrap.servers\",\"Value\":\"kaftestn1.halykbank.nb:9093,kaftestn2.halykbank.nb:9093,kaftestn3.halykbank.nb:9093\"},{\"Key\":\"security.protocol\",\"Value\":\"sasl_ssl\"},{\"Key\":\"sasl.mechanism\",\"Value\":\"SCRAM-SHA-256\"},{\"Key\":\"sasl.username\",\"Value\":\"bpmLCOUser\"},{\"Key\":\"sasl.password\",\"Value\":\"\"},{\"Key\":\"auto.offset.reset\",\"Value\":\"earliest\"},{\"Key\":\"enable.ssl.certificate.verification\",\"Value\":\"False\"},{\"Key\":\"enable.auto.commit\",\"Value\":\"False\"},{\"Key\":\"enable.auto.offset.store\",\"Value\":\"True\"}]","fields":{"SourceContext":"LegalCashOperationsWorker.Worker"}
 
 
-Локально запустил и получаю такую ошибку 
+  Но если в лоб передаю так 		                SaslPassword = string.IsNullOrEmpty(options.Value.KafkaSettings.SaslPassword) ? "uSoQtCTC?7QMnVfn" : options.Value.KafkaSettings.SaslPassword, то такой ошибки нет
