@@ -1,9 +1,41 @@
-                    _logger.LogInformation(JsonConvert.SerializeObject(_consumerConfig));
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
 
-                SaslPassword = options.Value.KafkaSettings.SaslPassword,
-              Если передаю так ошибку получаю, 
-              {"@timestamp":"2024-05-14T19:06:54.9312570+05:00","level":"Error","messageTemplate":"ExecuteAsync error: sasl.username and sasl.password must be set","message":"ExecuteAsync error: sasl.username and sasl.password must be set","fields":{"SourceContext":"LegalCashOperationsWorker.Worker"}}
-{"@timestamp":"2024-05-14T19:06:54.9326736+05:00","level":"Information","messageTemplate":"[{\"Key\":\"group.id\",\"Value\":\"BPMLCOGR\"},{\"Key\":\"bootstrap.servers\",\"Value\":\"kaftestn1.halykbank.nb:9093,kaftestn2.halykbank.nb:9093,kaftestn3.halykbank.nb:9093\"},{\"Key\":\"security.protocol\",\"Value\":\"sasl_ssl\"},{\"Key\":\"sasl.mechanism\",\"Value\":\"SCRAM-SHA-256\"},{\"Key\":\"sasl.username\",\"Value\":\"bpmLCOUser\"},{\"Key\":\"sasl.password\",\"Value\":\"\"},{\"Key\":\"auto.offset.reset\",\"Value\":\"earliest\"},{\"Key\":\"enable.ssl.certificate.verification\",\"Value\":\"False\"},{\"Key\":\"enable.auto.commit\",\"Value\":\"False\"},{\"Key\":\"enable.auto.offset.store\",\"Value\":\"True\"}]","message":"[{\"Key\":\"group.id\",\"Value\":\"BPMLCOGR\"},{\"Key\":\"bootstrap.servers\",\"Value\":\"kaftestn1.halykbank.nb:9093,kaftestn2.halykbank.nb:9093,kaftestn3.halykbank.nb:9093\"},{\"Key\":\"security.protocol\",\"Value\":\"sasl_ssl\"},{\"Key\":\"sasl.mechanism\",\"Value\":\"SCRAM-SHA-256\"},{\"Key\":\"sasl.username\",\"Value\":\"bpmLCOUser\"},{\"Key\":\"sasl.password\",\"Value\":\"\"},{\"Key\":\"auto.offset.reset\",\"Value\":\"earliest\"},{\"Key\":\"enable.ssl.certificate.verification\",\"Value\":\"False\"},{\"Key\":\"enable.auto.commit\",\"Value\":\"False\"},{\"Key\":\"enable.auto.offset.store\",\"Value\":\"True\"}]","fields":{"SourceContext":"LegalCashOperationsWorker.Worker"}
+ENV TZ=Asia/Almaty
+ENV ASPNETCORE_ENVIRONMENT=Development
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone 
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["LegalCashOperationsWorker.csproj", "."]
+RUN dotnet restore "./LegalCashOperationsWorker.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "LegalCashOperationsWorker.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "LegalCashOperationsWorker.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "LegalCashOperationsWorker.dll"]
 
 
-  Но если в лоб передаю так 		                SaslPassword = string.IsNullOrEmpty(options.Value.KafkaSettings.SaslPassword) ? "uSoQtCTC?7QMnVfn" : options.Value.KafkaSettings.SaslPassword, то такой ошибки нет
+{
+  "profiles": {
+    "LegalCashOperationsWorker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "useSSL": true
+    }
+  }
+}
