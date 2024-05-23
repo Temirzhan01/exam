@@ -1,1 +1,3 @@
-                                        @Html.ActionLink("Сформировать", "GenerateInternalDbChecksResult", "DBCheck", new RouteValueDictionary { { "cli_id", mc.CliId.ToString() }, { "cli_mark", "ClientCheck" }, { "ViewID", ViewID }, { "docViewId", docViewId }, { "docPackId", docPackId }, { "reqNumber", Session["RequestNumber"] } }, new Dictionary<string, object> { { "class", "generateinternalDbChecks" } }) но я же добавил сюда атрибуты, указал класс как generateinternalDbChecks
+http://172.16.143.9:8069/AtStorUploader/Uploader/OpenDoc?docID=1638183
+
+http:/172.16.143.9:8069/AtStorUploader/Uploader/OpenDoc при открытии ссылка теряет параметры
