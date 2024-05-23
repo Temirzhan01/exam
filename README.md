@@ -1,3 +1,12 @@
-http://172.16.143.9:8069/AtStorUploader/Uploader/OpenDoc?docID=1638183
+.widget .table * {
+    border-color: #e8e8e8 !important;
+}
 
-http:/172.16.143.9:8069/AtStorUploader/Uploader/OpenDoc при открытии ссылка теряет параметры
+input.btn-xs.generateinternalDbChecks.btn-primary.margin-top-10 {
+    border-color: #428bca; вот это линией перечеркнуто
+    background-color: #428bca;
+    color: #fff;
+    font-weight: normal;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
