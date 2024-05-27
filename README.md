@@ -1,58 +1,52 @@
-public override void DrawDocument()
-{
-    Table table = CurrentSection.AddTable();
-    table.Borders.Visible = true;
-    table.Borders.Color = Colors.Gray;
-    table.Format.Font.Name = "Times New Roman";
-    table.Format.Font.Size = 8;
-    table.Format.SpaceAfter = 0;
-    table.Format.SpaceBefore = 0;
-
-    // Добавляем колонки
-    int[] columnWidths = { 80, 100, 40, 55, 80, 55, 100 };
-    foreach (var width in columnWidths)
-    {
-        table.AddColumn(Unit.FromMillimeter(width));
-    }
-
-    // Добавляем заголовок
-    Row headerRow = table.AddRow();
-    headerRow.Cells[0].AddParagraph("БИН/ИИН").Format.Font.Bold = true;
-    headerRow.Cells[1].AddParagraph("Наименование").Format.Font.Bold = true;
-    headerRow.Cells[2].AddParagraph("Доля").Format.Font.Bold = true;
-    headerRow.Cells[3].AddParagraph("ОПФ").Format.Font.Bold = true;
-    headerRow.Cells[4].AddParagraph("Parent BIN").Format.Font.Bold = true;
-    headerRow.Cells[5].AddParagraph("Level").Format.Font.Bold = true;
-    headerRow.Cells[6].AddParagraph("Результаты проверок по базам").Format.Font.Bold = true;
-
-    // Устанавливаем границы для заголовка
-    SetCellBorders(headerRow);
-
-    // Добавляем пример строки
-    Row row = table.AddRow();
-    row.Cells[0].AddParagraph("123456789012");
-    row.Cells[1].AddParagraph("Пример компании");
-    row.Cells[2].AddParagraph("100%");
-    row.Cells[3].AddParagraph("ООО");
-    row.Cells[4].AddParagraph("987654321098");
-    row.Cells[5].AddParagraph("1");
-    row.Cells[6].AddParagraph("Проверено");
-
-    // Устанавливаем границы для строки
-    SetCellBorders(row);
-}
-
-private void SetCellBorders(Row row)
-{
-    foreach (var cell in row.Cells)
-    {
-        cell.Borders.Left.Width = 0.5;
-        cell.Borders.Right.Width = 0.5;
-        cell.Borders.Top.Width = 0.5;
-        cell.Borders.Bottom.Width = 0.5;
-        cell.Borders.Left.Color = Colors.Gray;
-        cell.Borders.Right.Color = Colors.Gray;
-        cell.Borders.Top.Color = Colors.Gray;
-        cell.Borders.Bottom.Color = Colors.Gray;
-    }
-}
+        Table tableAccounts2 = GetNewTable(new int[] { 100, 390 }, 10);
+        Row currentAccounts2 = tableAccounts2.AddRow();
+        AddTableWithTitle(mainRow, "ИНФОРМАЦИЯ В КОРПОРАТИВНОЙ АБС", 0, 490);
+        AddRow(tableAccounts2, currentAccounts2, new List<string>() { "Статус проверки:", CheckStatus("StatusBS/CheckStatus", Accounts) }, true);
+        AddRow(tableAccounts2, currentAccounts2, new List<string>() { "Результат поиска:", GetResult("StatusBS/Found", Accounts) }, false);
+        if (Accounts.SelectSingleNode("StatusBS/Found").InnerText.Equals("true") && Accounts.SelectNodes("Record") != null)
+        {
+            int i = 0;
+            if (AccountList.Count > 0)
+            {
+                currentAccounts2 = tableAccounts2.AddRow();
+                currentAccounts2.Cells[0].AddParagraph("Список текущих счетов:");
+                Table accounInfoTable;
+                Row accountInfoRow;
+                foreach (XmlNode AccXn in AccountList)
+                {
+                    if (AccXn.SelectSingleNode("ACCTYPE").InnerText.Equals("Текущие счета") && !AccXn.SelectSingleNode("SYSTEMTYPE").InnerText.Equals("Колвир розница"))
+                    {
+                        i++;
+                        AddTableWithTitle(currentAccounts2, $"{i} Текущий счет", 1, 390);
+                        accounInfoTable = GetNewTable(new int[] { 80, 120, 90, 95 }, 10);
+                        accountInfoRow = accounInfoTable.AddRow();
+                        AddRow(accounInfoTable, accountInfoRow, new List<string>() { "Номер счета:", AccXn.SelectSingleNode("ACCNUM").InnerText, "Баланс:", AccXn.SelectSingleNode("BALANCE").InnerText }, true);
+                        AddRow(accounInfoTable, accountInfoRow, new List<string>() { "Дата начала:", AccXn.SelectSingleNode("FROMDATE").InnerText, "Дата завершения:", AccXn.SelectSingleNode("TODATE").InnerText.Equals("31.12.4712") || @AccXn.SelectSingleNode("TODATE").InnerText.Equals("01.01.2030") ? "-" : AccXn.SelectSingleNode("TODATE").InnerText }, false);
+                        AddRow(accounInfoTable, accountInfoRow, new List<string>() { "Валюта:", AccXn.SelectSingleNode("CURRENCY").InnerText, "Статус:", AccXn.SelectSingleNode("STATUS").InnerText }, false);
+                        currentAccounts2.Cells[1].Elements.Add(accounInfoTable); //вот тут добавляю таблицу, но вопрос, как убрать отступ внутри cell? а то границы таблицы пробивают правый край, я бы хотел сжать таблицу влево
+                    }
+                }
+                i = 0;
+                currentAccounts2 = tableAccounts2.AddRow();
+                currentAccounts2.Cells[0].AddParagraph("Список депозитов:");
+                Table depositsInfoTable;
+                Row depositsInfoRow;
+                foreach (XmlNode AccXn in AccountList)
+                {
+                    if (!AccXn.SelectSingleNode("ACCTYPE").InnerText.Equals("Текущие счета") && !AccXn.SelectSingleNode("SYSTEMTYPE").InnerText.Equals("Колвир розница"))
+                    {
+                        i++;
+                        AddTableWithTitle(currentAccounts2, $"{i}  Депозит", 1, 390);
+                        depositsInfoTable = GetNewTable(new int[] { 80, 120, 90, 95 }, 10);
+                        depositsInfoRow = depositsInfoTable.AddRow();
+                        AddRow(depositsInfoTable, depositsInfoRow, new List<string>() { "Номер счета:", AccXn.SelectSingleNode("ACCNUM").InnerText, "Баланс:", AccXn.SelectSingleNode("BALANCE").InnerText }, true);
+                        AddRow(depositsInfoTable, depositsInfoRow, new List<string>() { "Дата начала:", AccXn.SelectSingleNode("FROMDATE").InnerText, "Дата завершения:", AccXn.SelectSingleNode("TODATE").InnerText.Equals("31.12.4712") || @AccXn.SelectSingleNode("TODATE").InnerText.Equals("01.01.2030") ? "-" : AccXn.SelectSingleNode("TODATE").InnerText }, false);
+                        AddRow(depositsInfoTable, depositsInfoRow, new List<string>() { "Валюта:", AccXn.SelectSingleNode("CURRENCY").InnerText, "Статус:", AccXn.SelectSingleNode("STATUS").InnerText }, false);
+                        currentAccounts2.Cells[1].Elements.Add(depositsInfoTable);
+                    }
+                }
+            }
+        }
+        AddRow(tableAccounts2, currentAccounts2, new List<string>() { "Комментарий:", Accounts.SelectSingleNode("StatusBS").InnerText }, false);
+        mainRow.Cells[0].Elements.Add(tableAccounts2);
+        mainRow.Cells[0].AddParagraph();
