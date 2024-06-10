@@ -1,15 +1,10 @@
-       
-        private string ReplaceFields(T model, string content)   Я пытаюсь написать метод, который будет автоматом заменять все поля, на основе модели.
+        public async Task<object> Create(string typeName) 
         {
-            PropertyInfo[] fields = model.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            foreach (PropertyInfo field in fields) 
+            Type type = Type.GetType(typeName); //тут получаю null хотя параметр не пустой, и такой класс существуют в папке модели
+            if (type == null) 
             {
-                var fieldValue = field.GetValue(model);
-                var filedName = field.Name;
-                if (field.PropertyType.IsClass && field.PropertyType.Name == QrCode) 
-                {
-                    content.Replace($"{{{filedName}}}", _generator.GenerateQrCodeBase64(fieldValue)); 
-                }
-                content.Replace($"{{{filedName}}}", fieldValue); // получаю ошибку из за скобок, как можно лучше реализовать все это, также если 
+                throw new ArgumentNullException(nameof(typeName));
             }
+            Type genericType = typeof(IDrawDocumentService<>).MakeGenericType(type); 
+            return _serviceProvider.GetService(genericType);
         }
