@@ -1,48 +1,15 @@
-using DinkToPdf;
-using DinkToPdf.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
-
-[ApiController]
-[Route("api/[controller]")]
-public class PdfController : ControllerBase
-{
-    private readonly IConverter _converter;
-
-    public PdfController(IConverter converter)
-    {
-        _converter = converter;
-    }
-
-    [HttpPost]
-    public IActionResult CreatePdf([FromBody] YourModel model)
-    {
-        string htmlContent = LoadHtmlTemplate()
-            .Replace("{{Title}}", model.Name)
-            .Replace("{{Description}}", model.Description);
-
-        var doc = new HtmlToPdfDocument
+       
+        private string ReplaceFields(T model, string content)   Я пытаюсь написать метод, который будет автоматом заменять все поля, на основе модели.
         {
-            GlobalSettings = {
-                PaperSize = PaperKind.A4,
-                Orientation = Orientation.Portrait
-            },
-            Objects = {
-                new ObjectSettings
+            PropertyInfo[] fields = model.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (PropertyInfo field in fields) 
+            {
+                var fieldValue = field.GetValue(model);
+                var filedName = field.Name;
+                if (field.PropertyType.IsClass && field.PropertyType.Name == QrCode) 
                 {
-                    HtmlContent = htmlContent,
+                    content.Replace($"{{{filedName}}}", _generator.GenerateQrCodeBase64(fieldValue)); 
                 }
+                content.Replace($"{{{filedName}}}", fieldValue); // получаю ошибку из за скобок, как можно лучше реализовать все это, также если 
             }
-        };
-
-        byte[] pdf = _converter.Convert(doc);
-
-        return File(pdf, "application/pdf", "generated.pdf");
-    }
-
-    private string LoadHtmlTemplate()
-    {
-        // Здесь путь к вашему HTML-шаблону
-        return System.IO.File.ReadAllText("template.html");
-    }
-}
+        }
