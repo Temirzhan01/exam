@@ -11,7 +11,66 @@ Referer: http://dspm2a001.halykbank.nb:11021/index.html
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
 accept: */*
 
-это запрос со свагера сервиса куда я обращаюсь и ниже мой запрос 
+  {
+    "version": {
+        "major": 1,
+        "minor": 1,
+        "build": -1,
+        "revision": -1,
+        "majorRevision": -1,
+        "minorRevision": -1
+    },
+    "content": {
+        "headers": [
+            {
+                "Key": "Content-Type",
+                "Value": [
+                    "multipart/form-data; boundary=\"b375689a-1f7b-4029-bd6c-f459ed2180b1\""
+                ]
+            },
+            {
+                "Key": "Content-Length",
+                "Value": [
+                    "19425"
+                ]
+            }
+        ]
+    },
+    "method": {
+        "method": "POST"
+    },
+    "requestUri": "http://172.16.143.9:8069/AtStorFilial/Upload.ashx?docID=4D65574C6768365539695176644A6E4F4449664330773D3D",
+    "headers": [
+        {
+            "Key": "X-dynaTrace",
+            "Value": [
+                "FW4;-1076712821;1;91770045;964;1;62323150;327;95d1;2h01;3h05784cbd;4h03c4;6h2c7b1df9a8ba7fb8676b9b8bd6f6f0f3;7ha5fc7aebc403d45d"
+            ]
+        },
+        {
+            "Key": "traceparent",
+            "Value": [
+                "00-2c7b1df9a8ba7fb8676b9b8bd6f6f0f3-a5fc7aebc403d45d-01"
+            ]
+        },
+        {
+            "Key": "tracestate",
+            "Value": [
+                "3b6f9ce-bfd2aa8b@dt=fw4;1;5784cbd;3c4;1;0;0;147;e5f8;2h01;3h05784cbd;4h03c4;7ha5fc7aebc403d45d"
+            ]
+        },
+        {
+            "Key": "Request-Id",
+            "Value": [
+                "|944967f8-42d856a792241f16.2."
+            ]
+        }
+    ],
+    "properties": {}
+}
+}
+
+это верный запрос со свагера сервиса куда я обращаюсь и ниже мой запрос 
 
 {
   "Version": "1.1",
@@ -101,4 +160,6 @@ accept: */*
     }
   },
   "IsSuccessStatusCode": false
-}
+
+
+
