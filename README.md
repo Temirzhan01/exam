@@ -9,284 +9,161 @@
         body {
             font-family: Arial, sans-serif;
         }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header .date {
+            text-align: right;
+            font-size: 8pt;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px dotted #000;
+        }
+
+        th,
+        td {
+            padding: 5px;
+            text-align: left;
+            font-size: 8pt;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .strong {
+            font-weight: bold;
+        }
+
+        .large-text {
+            font-size: 10pt;
+        }
     </style>
 </head>
 
 <body>
-    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; line-height:108%; font-size:10pt;"><strong><span
-                style="font-family:'Times New Roman';">Кассалық кіріс ордері / Приходный кассовый ордер № 1 от
-                08.04.2024 г.</span></strong></p>
-    <p style="margin-top:0pt; margin-bottom:0pt; text-align:right; line-height:108%; font-size:8pt;"><span
-            style="font-family:'Times New Roman';">Уақыты / Время: 16:32:06</span></p>
-    <table cellspacing="0" cellpadding="0" style="width:479.35pt; border-collapse:collapse;">
-        <tbody>
-            <tr style="height:32.4pt;">
-                <td colspan="5"
-                    style="width:249.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Халык банкі АҚ Қостанай</span><span
-                            style="font-family:'Times New Roman';">&nbsp;&nbsp;</span><span
-                            style="font-family:'Times New Roman';">Облыстық Филиалы</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Областной Филиал АО Народного Банка Казахстана в г.
-                            Костанай</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">БСН / БИН 325235323</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">ББК/БИК HSBKKZKX</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">ЦБ № 1</span></p>
+    <div class="container">
+        <div class="header">
+            <p class="large-text strong">Кассалық кіріс ордері / Приходный кассовый ордер № 1 от 08.04.2024 г.</p>
+            <p class="date">Уақыты / Время: 16:32:06</p>
+        </div>
+        <table>
+            <tr>
+                <td colspan="5">
+                    <p>Халык банкі АҚ Қостанай Облыстық Филиалы</p>
+                    <p>Областной Филиал АО Народного Банка Казахстана в г. Костанай</p>
+                    <p>БСН / БИН 325235323</p>
+                    <p>ББК/БИК HSBKKZKX</p>
+                    <p>ЦБ № 1</p>
                 </td>
-                <td colspan="5"
-                    style="width:207.25pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Мекен -жай:&nbsp;</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Костанай қ., Тәуелсіздік к-сі, 235235</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Адрес:&nbsp;</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">г. Костанай, ул. Тәуелсіздік, д. №2352355</span></p>
+                <td colspan="5">
+                    <p>Мекен -жай:</p>
+                    <p>Костанай қ., Тәуелсіздік к-сі, 235235</p>
+                    <p>Адрес:</p>
+                    <p>г. Костанай, ул. Тәуелсіздік, д. №2352355</p>
                 </td>
             </tr>
-            <tr style="height:23.65pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Клиенттің атауы / Наименование клиента</span></p>
+            <tr>
+                <td colspan="2" class="center">Клиенттің атауы / Наименование клиента</td>
+                <td colspan="3" class="center strong">Товарищество с ограниченной ответственностью "Мелитопольское"</td>
+                <td colspan="2" class="center">Шот нөмірі / № счета</td>
+                <td colspan="3" class="center strong">KZ9623535235523</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p>СНН / ИИН</p>
+                    <p>(БСН / БИН)</p>
                 </td>
-                <td colspan="3"
-                    style="width:152.2pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">Товарищество с ограниченной ответственностью
-                                &quot;Мелитопольское&quot;</span></strong></p>
+                <td class="center strong">23523523523</td>
+                <td class="center">АЖК / КОД</td>
+                <td class="center strong">17</td>
+                <td class="center">БеК / КБе</td>
+                <td class="center strong">17</td>
+                <td colspan="2" class="center">ТБК / КНП</td>
+                <td class="center strong">331</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p>Қатысушының ТАӘ /</p>
+                    <p>ФИО вносителя</p>
                 </td>
-                <td colspan="2"
-                    style="width:87.55pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Шот нөмірі / № счета</span></p>
-                </td>
-                <td colspan="3"
-                    style="width:108.9pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">KZ9623535235523</span></strong></p>
+                <td colspan="3" class="center strong">hfshdfhfdhdfhdfhdfhdfhdfhdfhdfh</td>
+                <td class="center">СНН / ИИН</td>
+                <td colspan="4" class="center strong">23523523</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">Ұсынылды / Предъявлен</td>
+                <td colspan="8" class="center strong">Удостоверение личности № 234325 от 01.09.2015г. МВД РК</td>
+            </tr>
+            <tr>
+                <td class="center">Валюта</td>
+                <td class="center strong">KZT</td>
+                <td colspan="3" class="center">Сомасы санмен / Сумма цифрами</td>
+                <td colspan="5" class="center strong">5 000 тенге 00 тиын</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">Cомасы жазумен / Сумма прописью</td>
+                <td colspan="8" class="center strong">
+                    <p>Бес мың тенге 00 тиын</p>
+                    <p>Пять тысяч тенге 00 тиын</p>
                 </td>
             </tr>
-            <tr style="height:21.2pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">СНН / ИИН</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">(БСН / БИН)</span></p>
-                </td>
-                <td
-                    style="width:53pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">23523523523</span></strong></p>
-                </td>
-                <td
-                    style="width:45.9pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">АЖК / КОД</span></p>
-                </td>
-                <td
-                    style="width:31.7pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">17</span></strong></p>
-                </td>
-                <td
-                    style="width:53pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">БеК / КБе</span></p>
-                </td>
-                <td
-                    style="width:23.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">17</span></strong></p>
-                </td>
-                <td colspan="2"
-                    style="width:49pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">ТБК / КНП</span></p>
-                </td>
-                <td
-                    style="width:49.1pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">331</span></strong></p>
+            <tr>
+                <td colspan="2" class="center">Назначение / Мақсаты</td>
+                <td colspan="8" class="center strong">
+                    <p>Шотты толтыру</p>
+                    <p>Пополнение счета</p>
                 </td>
             </tr>
-            <tr style="height:21.45pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Қатысушының ТАӘ /</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">ФИО вносителя</span></p>
+            <tr>
+                <td colspan="2" rowspan="2" class="center">Қатысушының қолы / Подпись вносителя</td>
+                <td colspan="3" rowspan="2" class="center"></td>
+                <td colspan="3" class="center">
+                    <p>Орындаушы /</p>
+                    <p>Исполнитель</p>
                 </td>
-                <td colspan="3"
-                    style="width:152.2pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">hfshdfhfdhdfhdfhdfhdfhdfhdfhdfh</span></strong>
-                    </p>
-                </td>
-                <td
-                    style="width:53pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">СНН / ИИН</span></p>
-                </td>
-                <td colspan="4"
-                    style="width:143.45pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">23523523</span></strong></p>
+                <td colspan="2" rowspan="2" class="center"></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="center">
+                    <p>dsgdsgdsg А.К.</p>
                 </td>
             </tr>
-            <tr style="height:13.3pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Ұсынылды / Предъявлен</span></p>
+            <tr>
+                <td colspan="2" class="center">Бақылаушы / Контролер</td>
+                <td colspan="3" rowspan="2" class="center"></td>
+                <td colspan="3" class="center">Кассир</td>
+                <td colspan="2" rowspan="2" class="center"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p>sdgdsgdg Д.И.</p>
                 </td>
-                <td colspan="8"
-                    style="width:370.25pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">Удостоверение личности № 234325 от 01.09.2015г.
-                                МВД РК</span></strong></p>
+                <td colspan="3" class="center">
+                    <p>sdgsdgsd А.К.</p>
                 </td>
             </tr>
-            <tr style="height:11.25pt;">
-                <td
-                    style="width:37.95pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Валюта</span></p>
-                </td>
-                <td
-                    style="width:38pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">KZT</span></strong></p>
-                </td>
-                <td colspan="3"
-                    style="width:152.2pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Сомасы санмен / Сумма цифрами</span></p>
-                </td>
-                <td colspan="5"
-                    style="width:207.25pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">5</span></strong><strong><span
-                                style="font-family:'Times New Roman';">&nbsp;</span></strong><strong><span
-                                style="font-family:'Times New Roman';">000 тенге 00 тиын</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height:11.25pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Cомасы жазумен / Сумма прописью</span></p>
-                </td>
-                <td colspan="8"
-                    style="width:370.25pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">Бес мың тенге 00 тиын</span></strong></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">Пять тысяч тенге 00 тиын</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height:11.25pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Назначение / Мақсаты</span></p>
-                </td>
-                <td colspan="8"
-                    style="width:370.25pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">Шотты толтыру</span></strong></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">Пополнение счета</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height:14.4pt;">
-                <td colspan="2" rowspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Қатысушының қолы / Подпись вносителя</span></p>
-                </td>
-                <td colspan="3" rowspan="2"
-                    style="width:152.2pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">&nbsp;</span></p>
-                </td>
-                <td colspan="3"
-                    style="width:88.45pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Орындаушы /</span></p>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Исполнитель</span></p>
-                </td>
-                <td colspan="2" rowspan="2"
-                    style="width:108pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">&nbsp;</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height:14.4pt;">
-                <td colspan="3"
-                    style="width:88.45pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
-                            style="font-family:'Times New Roman';">dsgdsgdsg А.К.</span></p>
-                </td>
-            </tr>
-            <tr style="height:14.4pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Бақылаушы / Контролер</span></p>
-                </td>
-                <td colspan="3" rowspan="2"
-                    style="width:152.2pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">&nbsp;</span></p>
-                </td>
-                <td colspan="3"
-                    style="width:88.45pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">Кассир</span></p>
-                </td>
-                <td colspan="2" rowspan="2"
-                    style="width:108pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><strong><span
-                                style="font-family:'Times New Roman';">&nbsp;</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height:14.4pt;">
-                <td colspan="2"
-                    style="width:86.75pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">sdgdsgdg Д.И.</span></p>
-                </td>
-                <td colspan="3"
-                    style="width:88.45pt; border-style:dotted; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:middle;">
-                    <p style="margin-top:0pt; margin-bottom:0pt; font-size:8pt;"><span
-                            style="font-family:'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
-                            style="font-family:'Times New Roman';">sdgsdgsd А.К.</span></p>
-                </td>
-            </tr>
-            <tr style="height:0pt;">
-                <td style="width:48.75pt;"><br></td>
-                <td style="width:48.8pt;"><br></td>
-                <td style="width:63.8pt;"><br></td>
-                <td style="width:56.7pt;"><br></td>
-                <td style="width:42.5pt;"><br></td>
-                <td style="width:63.8pt;"><br></td>
-                <td style="width:34.55pt;"><br></td>
-                <td style="width:0.9pt;"><br></td>
-                <td style="width:58.9pt;"><br></td>
-                <td style="width:59.9pt;"><br></td>
-            </tr>
-        </tbody>
-    </table>
+        </table>
+    </div>
 </body>
 
 </html>
