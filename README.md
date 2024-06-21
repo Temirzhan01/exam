@@ -1,4 +1,4 @@
- {(isSubsidy && stateParticipant == 'newStateSP') && (
+            {(isSubsidy && stateParticipant == 'newStateSP') && (
               <FormGroup>
                 <Col sm={6}>
                   <ControlLabel>Дата ставки субсидирования:</ControlLabel>
@@ -35,7 +35,7 @@
                   />
                 </Col>
                 {this.state.fieldsSubsidCount >= 1 && (
-                  <React.Fragment>
+                  <FormGroup>
                     <Col sm={6}>
                       <ControlLabel>Дата ставки субсидирования:</ControlLabel>
                       <DateTimeField
@@ -73,10 +73,10 @@
                         }
                       />
                     </Col>
-                  </React.Fragment>
+                  </FormGroup>
                 )}
                 {this.state.fieldsSubsidCount >= 2 && (
-                  <React.Fragment>
+                  <FormGroup>
                     <Col sm={6}>
                       <ControlLabel>Дата ставки субсидирования:</ControlLabel>
                       <DateTimeField
@@ -114,7 +114,7 @@
                         }
                       />
                     </Col>
-                  </React.Fragment>
+                  </FormGroup>
                 )}
               </FormGroup>
             )}
@@ -130,13 +130,8 @@
                 </Button>
               </Col>
             </FormGroup>
-          </div>
-        </div>
-      </Col>
-    );
-  }
-
-  async addSubsidFields() {
+  
+  addSubsidFields() {
     console.log('adding');
     if (this.state.fieldsSubsidCount < 2) {
       this.setState((prevState) => ({
@@ -145,11 +140,10 @@
     }
   }
 
-  async deleteSubsidFields() {
+  deleteSubsidFields() {
     if (this.state.fieldsSubsidCount > 0) {
       this.setState((prevState) => ({
         fieldsSubsidCount: prevState.fieldsSubsidCount - 1,
       }));
     }
   }
-}
