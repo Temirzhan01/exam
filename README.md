@@ -1,66 +1,91 @@
-{
-              (isSubsidy && stateParticipant == 'newStateSP') &&
-              <FormGroup>
-                <Col sm={6}><ControlLabel>Дата ставки субсидирования:</ControlLabel>
-                  <DateTimeField
-                    {...this.dateFieldProps}
-                    style={{ border: timeStyleSubStart }}
-                    dateTime={finInstrumentData.subStartDateString || ''}
-                    onChange={(e: any) => this.handleFinInstrumentChange({ subStartDateString: e })}
-                    inputProps={{ disabled: !(role == 'assistant' || (role == 'dabo' && isNonRepayment)) }} />
-                </Col>
-                <Col sm={6}><ControlLabel>Процент субсидирования:</ControlLabel>
-                  <FormControl
-                    type="text"
-                    value={finInstrumentData.subInterest || ''}
-                    className={(finInstrumentData.subInterest && finInstrumentData.interestRate) ? (parseFloat(finInstrumentData.subInterest) < finInstrumentData.interestRate && finInstrumentData.subInterest != '0') ? '' : 'input-validation-error' : 'input-validation-error'}
-                    onChange={(e: any) => this.handleRequestedFloatInput({ subInterest: e.target.value }, 'subInterest')}
-                    disabled={!(role == 'assistant' || (role == 'dabo' && isNonRepayment))}
-                  />
-                </Col>
-                <Col sm={6}><ControlLabel>Дата ставки субсидирования:</ControlLabel> смотри мне нужно вот это поле, также снизу
-                  <DateTimeField
-                    {...this.dateFieldProps}
-                    style={{ border: timeStyleSubStart }}
-                    dateTime={finInstrumentData.subStartDateString2 || ''}
-                    onChange={(e: any) => this.handleFinInstrumentChange({ subStartDateString: e })}
-                    inputProps={{ disabled: !(role == 'assistant' || (role == 'dabo' && isNonRepayment)) }} />
-                </Col>
-                <Col sm={6}><ControlLabel>Процент субсидирования:</ControlLabel> это поле
-                  <FormControl
-                    type="text"
-                    value={finInstrumentData.subInterest2 || ''}
-                    className={(finInstrumentData.subInterest && finInstrumentData.interestRate) ? (parseFloat(finInstrumentData.subInterest) < finInstrumentData.interestRate && finInstrumentData.subInterest != '0') ? '' : 'input-validation-error' : 'input-validation-error'}
-                    onChange={(e: any) => this.handleRequestedFloatInput({ subInterest: e.target.value }, 'subInterest')}
-                    disabled={!(role == 'assistant' || (role == 'dabo' && isNonRepayment))}
-                  />
-                </Col>
-                <Col sm={6}><ControlLabel>Дата ставки субсидирования:</ControlLabel> это поле
-                  <DateTimeField
-                    {...this.dateFieldProps}
-                    style={{ border: timeStyleSubStart }}
-                    dateTime={finInstrumentData.subStartDateString3 || ''}
-                    onChange={(e: any) => this.handleFinInstrumentChange({ subStartDateString: e })}
-                    inputProps={{ disabled: !(role == 'assistant' || (role == 'dabo' && isNonRepayment)) }} />
-                </Col>
-                <Col sm={6}><ControlLabel>Процент субсидирования:</ControlLabel> и это поле скрыть
-                  <FormControl
-                    type="text"
-                    value={finInstrumentData.subInterest3 || ''}
-                    className={(finInstrumentData.subInterest && finInstrumentData.interestRate) ? (parseFloat(finInstrumentData.subInterest) < finInstrumentData.interestRate && finInstrumentData.subInterest != '0') ? '' : 'input-validation-error' : 'input-validation-error'}
-                    onChange={(e: any) => this.handleRequestedFloatInput({ subInterest: e.target.value }, 'subInterest')}
-                    disabled={!(role == 'assistant' || (role == 'dabo' && isNonRepayment))}
-                  />
-                </Col>
+import React, { useState } from 'react';
+import { FormGroup, Col, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import DateTimeField from 'react-bootstrap-datetimepicker';
 
-              </FormGroup>
-            }
-            {
-              <FormGroup>
-                <Col sm={12} className="gap-1">
-                  <Button className="btn btn-light btn-block" onClick={() => }>Добавить поля</Button> и тут при нажатии, они должны появляться, типа первые два поля они по дефолту есть, если нажать на кнопку должны появиться остальные две, если нажать еще раз те еще две, максимум можно нажать 2 раза, также еще одну кнопку для скрытия рядом поставить если есть поля которые были скрыты и открыты, скрыть их, по одному нажатия последние 2 добавленые
-                </Col>
-              </FormGroup>
+const SubsidyForm = () => {
+  const [fieldCount, setFieldCount] = useState(0);
+  const [finInstrumentData, setFinInstrumentData] = useState({
+    subStartDateString: '',
+    subInterest: '',
+    subStartDateString2: '',
+    subInterest2: '',
+    subStartDateString3: '',
+    subInterest3: '',
+    subStartDateString4: '',
+    subInterest4: '',
+    subStartDateString5: '',
+    subInterest5: '',
+    subStartDateString6: '',
+    subInterest6: '',
+  });
 
-              Суть какая, есть 2 поля, при нажатии добавить появляются еще точно таких же 2 поля, просто другие параметры будут внутри, если еще раз нажать то еше 2 поля также, максимум  могут бть 6 полей, также кнопка удалить которая будет очищать и обратно скрывать те поля которые были добавлены помимо двух первых дефолтных
-            }
+  const dateFieldProps = {}; // Замените на ваши реальные пропсы
+  const timeStyleSubStart = {}; // Замените на ваши реальные стили
+  const role = 'assistant'; // или другая роль
+  const isNonRepayment = true; // или другая логика
+
+  const handleAddFields = () => {
+    if (fieldCount < 2) setFieldCount(fieldCount + 1);
+  };
+
+  const handleRemoveFields = () => {
+    if (fieldCount > 0) setFieldCount(fieldCount - 1);
+  };
+
+  const handleFinInstrumentChange = (updatedData) => {
+    setFinInstrumentData({ ...finInstrumentData, ...updatedData });
+  };
+
+  const handleRequestedFloatInput = (updatedData, field) => {
+    setFinInstrumentData({ ...finInstrumentData, ...updatedData });
+  };
+
+  const renderFields = (startIndex) => {
+    const fields = [];
+    for (let i = 0; i < 2; i++) {
+      const index = startIndex + i;
+      fields.push(
+        <React.Fragment key={index}>
+          <Col sm={6}><ControlLabel>Дата ставки субсидирования:</ControlLabel>
+            <DateTimeField
+              {...dateFieldProps}
+              style={{ border: timeStyleSubStart }}
+              dateTime={finInstrumentData[`subStartDateString${index + 1}`] || ''}
+              onChange={(e) => handleFinInstrumentChange({ [`subStartDateString${index + 1}`]: e })}
+              inputProps={{ disabled: !(role === 'assistant' || (role === 'dabo' && isNonRepayment)) }} />
+          </Col>
+          <Col sm={6}><ControlLabel>Процент субсидирования:</ControlLabel>
+            <FormControl
+              type="text"
+              value={finInstrumentData[`subInterest${index + 1}`] || ''}
+              className={(finInstrumentData[`subInterest${index + 1}`] && finInstrumentData.interestRate) ? (parseFloat(finInstrumentData[`subInterest${index + 1}`]) < finInstrumentData.interestRate && finInstrumentData[`subInterest${index + 1}`] !== '0') ? '' : 'input-validation-error' : 'input-validation-error'}
+              onChange={(e) => handleRequestedFloatInput({ [`subInterest${index + 1}`]: e.target.value }, `subInterest${index + 1}`)}
+              disabled={!(role === 'assistant' || (role === 'dabo' && isNonRepayment))}
+            />
+          </Col>
+        </React.Fragment>
+      );
+    }
+    return fields;
+  };
+
+  return (
+    <div>
+      {(isSubsidy && stateParticipant === 'newStateSP') && (
+        <FormGroup>
+          {renderFields(0)}
+          {fieldCount >= 1 && renderFields(2)}
+          {fieldCount >= 2 && renderFields(4)}
+        </FormGroup>
+      )}
+      <FormGroup>
+        <Col sm={12} className="gap-1">
+          <Button className="btn btn-light btn-block" onClick={handleAddFields}>Добавить поля</Button>
+          {fieldCount > 0 && <Button className="btn btn-light btn-block" onClick={handleRemoveFields}>Удалить последние добавленные поля</Button>}
+        </Col>
+      </FormGroup>
+    </div>
+  );
+};
+
+export default SubsidyForm;
