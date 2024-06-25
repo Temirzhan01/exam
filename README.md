@@ -127,7 +127,7 @@
                         <p><strong><span>{{documentType}} № {{documentNumber}} от {{documentGivenDate}}г. {{documentGivenBy}}</span></strong></p>
                     </td>
                 </tr>
-                <tr class="inner" style="height:12.38pt;">
+                <tr class="inner" style="height:13.62pt;">
                     <td style="width:41.75pt; vertical-align:middle;">
                         <p><span>Валюта</span></p>
                     </td>
@@ -141,7 +141,7 @@
                         <p><strong>{{amount}}</strong></p>
                     </td>
                 </tr>
-                <tr class="inner" style="height:12.38pt;">
+                <tr class="inner" style="height:13.62pt;">
                     <td colspan="2" style="width:95.43pt; vertical-align:middle;">
                         <p><span>Cомасы жазумен / Сумма прописью</span></p>
                     </td>
@@ -150,7 +150,7 @@
                         <p><strong><span>{{amountStringRUS}}</span></strong></p>
                     </td>
                 </tr>
-                <tr class="inner" style="height:12.38pt;">
+                <tr class="inner" style="height:13.62pt;">
                     <td colspan="2" style="width:95.43pt; vertical-align:middle;">
                         <p><span>Назначение / Мақсаты</span></p>
                     </td>
@@ -169,41 +169,41 @@
                     <td colspan="3" style="width:97.30pt; vertical-align:middle;">
                         <p><span>Орындаушы /</span></p>
                         <p><span>Исполнитель</span></p>
-</td>
-<td colspan="2" rowspan="2" style="width:118.80pt; vertical-align:middle;">
-<p><strong><span></span></strong></p>
-</td>
-</tr>
-<tr class="inner" style="height:15.84pt;">
-<td colspan="3" style="width:97.30pt; vertical-align:middle;">
-<p><span>{{executorFIO}}</span></p>
-</td>
-</tr>
-<tr class="inner" style="height:15.84pt;">
-<td colspan="2" style="width:95.43pt; vertical-align:middle;">
-<p><span>Бақылаушы / Контролер</span></p>
-</td>
-<td colspan="3" rowspan="2" style="width:167.42pt; vertical-align:middle;">
-<p><strong><span></span></strong></p>
-</td>
-<td colspan="3" style="width:97.30pt; vertical-align:middle;">
-<p><span>Кассир</span></p>
-</td>
-<td colspan="2" rowspan="2" style="width:118.80pt; vertical-align:middle;">
-<p><strong><span></span></strong></p>
-</td>
-</tr>
-<tr class="inner" style="height:15.84pt;">
-<td colspan="2" style="width:95.43pt; vertical-align:middle;">
-<p><span>{{contollerFIO}}</span></p>
-</td>
-<td colspan="3" style="width:97.30pt; vertical-align:middle;">
-<p><span>{{cashierFIO}}</span></p>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-
+                    </td>
+                    <td colspan="2" rowspan="2" style="width:118.80pt; vertical-align:middle;">
+                        <p><strong><span></span></strong></p>
+                    </td>
+                </tr>
+                <tr class="inner" style="height:17.42pt;">
+                    <td colspan="3" style="width:97.30pt; vertical-align:middle;">
+                        <p><span>{{executorFIO}}</span></p>
+                    </td>
+                </tr>
+                <tr class="inner" style="height:15.84pt;">
+                    <td colspan="2" style="width:95.43pt; vertical-align:middle;">
+                        <p><span>Бақылаушы / Контролер</span></p>
+                    </td>
+                    <td colspan="3" rowspan="2" style="width:167.42pt; vertical-align:middle;">
+                        <p><strong><span></span></strong></p>
+                    </td>
+                    <td colspan="3" style="width:97.30pt; vertical-align:middle;">
+                        <p><span>Кассир</span></p>
+                    </td>
+                    <td colspan="2" rowspan="2" style="width:118.80pt; vertical-align:middle;">
+                        <p><strong><span></span></strong></p>
+                    </td>
+                </tr>
+                <tr class="inner" style="height:17.42pt;">
+                    <td colspan="2" style="width:95.43pt; vertical-align:middle;">
+                        <p><span>{{contollerFIO}}</span></p>
+                    </td>
+                    <td colspan="3" style="width:97.30pt; vertical-align:middle;">
+                        <p><span>{{cashierFIO}}</span></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
+
 </html>
