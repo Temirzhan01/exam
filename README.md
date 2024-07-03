@@ -1,7 +1,2 @@
-System.IO.DirectoryNotFoundException: Could not find a part of the path '/app/..\..\..\/HTMLDocuments/Outcome.html'.
-
-        private async Task<string> LoadHtmlTemplate(string templateName)
-        {
-            string fp = Path.Combine(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\")), "HTMLDocuments", $"{templateName}.html");
-            return await System.IO.File.ReadAllTextAsync(fp);
-        }
+COPY ["HTMLDocuments/..","/app/HTMLDocuments/"]
+Напиши мне как именно с папки HTMLDocuments все содержимое перекинуть в директорию создавая папку app/HTMLDocuments/
