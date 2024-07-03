@@ -1,32 +1,7 @@
-deleteSubsidFields() {
-  this.setState((prevState: SuperFormaState & LocalState) => {
-    const count = prevState.finInstrumentInfoData.finInstrumentData.fieldsSubsidCount > 0 
-      ? prevState.finInstrumentInfoData.finInstrumentData.fieldsSubsidCount - 1 
-      : 0;
-    
-    // Создаем копию finInstrumentData
-    const updatedFinInstrumentData = { ...prevState.finInstrumentInfoData.finInstrumentData };
+System.IO.DirectoryNotFoundException: Could not find a part of the path '/app/..\..\..\/HTMLDocuments/Outcome.html'.
 
-    // В зависимости от значения count очищаем соответствующие поля
-    if (count === 1) {
-      updatedFinInstrumentData.subInt2 = '';
-      updatedFinInstrumentData.subDate2 = '';
-    } else if (count === 0) {
-      updatedFinInstrumentData.subInt2 = '';
-      updatedFinInstrumentData.subDate2 = '';
-      updatedFinInstrumentData.subInt3 = '';
-      updatedFinInstrumentData.subDate3 = '';
-    }
-
-    return {
-      ...prevState,
-      finInstrumentInfoData: {
-        ...prevState.finInstrumentInfoData,
-        finInstrumentData: {
-          ...updatedFinInstrumentData,
-          fieldsSubsidCount: count,
+        private async Task<string> LoadHtmlTemplate(string templateName)
+        {
+            string fp = Path.Combine(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\")), "HTMLDocuments", $"{templateName}.html");
+            return await System.IO.File.ReadAllTextAsync(fp);
         }
-      }
-    };
-  });
-}
