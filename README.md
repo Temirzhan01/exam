@@ -1,2 +1,5 @@
-COPY ["HTMLDocuments/..","/app/HTMLDocuments/"]
-Напиши мне как именно с папки HTMLDocuments все содержимое перекинуть в директорию создавая папку app/HTMLDocuments/
+System.IO.DirectoryNotFoundException: Could not find a part of the path '/app/HTMLDocuments/Outcome.html'.
+
+COPY HTMLDocuments /app/HTMLDocuments/
+
+            return await System.IO.File.ReadAllTextAsync($"HTMLDocuments/{templateName}.html");
