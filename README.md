@@ -1,67 +1,37 @@
-Для публикации проекта ASP.NET Core 6 в IIS на Windows нужно выполнить несколько шагов. Вот подробное руководство:
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-1. Установите необходимые компоненты
-Установите .NET Core Hosting Bundle:
-Загрузите и установите .NET Core Hosting Bundle с официального сайта .NET. Это установит .NET Runtime, .NET SDK и ASP.NET Core Module (ANCM).
+ENV TZ=Asia/Almaty
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone 
+ENV ASPNETCORE_ENVIRONMENT=Development
 
-Ссылка на загрузку: https://dotnet.microsoft.com/download/dotnet/6.0
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["SstlService/SstlService.csproj", "SstlService/"]
+RUN dotnet restore "SstlService/SstlService.csproj"
+COPY . .
+WORKDIR "/src/"
+RUN dotnet build "./SstlService.csproj" -c Release -o /app/build
 
-Установите IIS:
-Убедитесь, что IIS установлен на вашем сервере. Если IIS еще не установлен, вы можете установить его через "Управление компонентами Windows".
+FROM build AS publish
+RUN dotnet publish "./SstlService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-2. Настройте IIS
-Создайте сайт в IIS:
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "SstlService.dll"]
 
-Откройте Internet Information Services (IIS) Manager.
-В дереве подключения слева щелкните правой кнопкой мыши на узел Sites и выберите Add Website.
-Укажите имя сайта, физический путь к папке, в которую будет размещен ваш проект, и номер порта.
-Настройте пул приложений:
 
-В IIS Manager перейдите в Application Pools.
-Найдите пул приложений, связанный с вашим сайтом, и убедитесь, что он использует .NET CLR Version равную No Managed Code.
-Если нужного пула приложений нет, создайте новый, указав .NET CLR Version как No Managed Code.
-3. Публикация проекта
-Публикация через Visual Studio:
+Ошибка при сборке
 
-В Visual Studio щелкните правой кнопкой мыши на проекте и выберите Publish.
-Выберите Folder как метод публикации и укажите путь к папке, где будет размещен ваш проект.
-Нажмите Finish, затем Publish.
-Публикация через командную строку:
-Откройте командную строку и выполните следующие команды:
-
-shell
-Копировать код
-dotnet publish -c Release -o C:\path\to\your\site
-Замените C:\path\to\your\site на путь к папке, куда будет опубликован ваш сайт.
-
-4. Настройте сайт в IIS
-Настройте разрешения:
-Убедитесь, что пользователь, от имени которого работает IIS (обычно IIS_IUSRS), имеет доступ к папке, в которую вы опубликовали проект.
-
-Настройте веб-конфигурацию:
-Убедитесь, что в корневой папке вашего сайта находится файл web.config. Этот файл обычно создается автоматически при публикации, но вот пример содержимого:
-
-xml
-Копировать код
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <system.webServer>
-    <handlers>
-      <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified"/>
-    </handlers>
-    <aspNetCore processPath="dotnet" arguments=".\YourProject.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="InProcess"/>
-  </system.webServer>
-</configuration>
-Замените YourProject.dll на имя вашего сборки.
-
-5. Проверьте работу сайта
-Перезапустите IIS:
-После всех изменений рекомендуется перезапустить IIS. Вы можете сделать это из командной строки:
-
-shell
-Копировать код
-iisreset
-Откройте браузер и перейдите по адресу:
-Перейдите по адресу, указанному при создании сайта (например, http://localhost:5000) и убедитесь, что ваш сайт работает правильно.
-
-Если у вас возникнут дополнительные вопросы или проблемы, пожалуйста, дайте знать, и я помогу вам!
+Dockerfile:12
+--------------------
+  10 |     FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+  11 |     WORKDIR /src
+  12 | >>> COPY ["SstlService/SstlService.csproj", "SstlService/"]
+  13 |     RUN dotnet restore "SstlService/SstlService.csproj"
+  14 |     COPY . .
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref cb8e8101-b05c-45c3-9eb2-533342da1eed::k1dla4ub9rdjz63z73ir8sy9j: "/SstlService/SstlService.csproj": not found
