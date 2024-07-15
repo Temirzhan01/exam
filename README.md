@@ -140,3 +140,50 @@ json
 }
 Заключение
 Этот подход позволяет вам при сборке и запуске приложения подтягивать конфигурационные данные из Consul и внедрять их в вашу конфигурацию приложения. При необходимости вы можете дополнительно обработать данные, например, преобразовать их в нужные форматы или добавить дополнительные уровни вложенности.
+
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Add Consul configuration
+var configBuilder = new ConfigurationBuilder()
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+var builtConfig = configBuilder.Build();
+var consulAddress = builtConfig["Consul:Address"];
+var consulKey = builtConfig["Consul:Key"];
+
+configBuilder.AddConsul(consulAddress, consulKey);
+
+var config = configBuilder.Build();
+builder.Configuration.AddConfiguration(config);
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
