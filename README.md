@@ -1,29 +1,51 @@
-public class RedisService : IRedisService
+public void ConfigureServices(IServiceCollection services)
 {
-    private readonly IConnectionMultiplexer _connectionMultiplexer;
-    private readonly AsyncRetryPolicy _retryPolicy;
-
-    public RedisService(IConnectionMultiplexer connectionMultiplexer)
+    services.AddControllers();
+    
+    // Добавление Swagger генерации документации
+    services.AddSwaggerGen(c =>
     {
-        _connectionMultiplexer = connectionMultiplexer;
-        _retryPolicy = Policy.Handle<RedisConnectionException>()
-                             .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2));
-    }
-
-    public async Task<string> GetValueAsync(string key)
-    {
-        return await _retryPolicy.ExecuteAsync(async () =>
-        {
-            var db = _connectionMultiplexer.GetDatabase();
-            return await db.StringGetAsync(key);
+        c.SwaggerDoc("v1", new OpenApiInfo 
+        { 
+            Title = "My API", 
+            Version = "v1" 
         });
+    });
+}
+
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    if (env.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
     }
 
-    // Другие методы остаются без изменений
+    // Включение middleware для генерации JSON документации
+    app.UseSwagger();
+
+    // Включение middleware для Swagger UI
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+        // Настройка кастомного URL для Swagger UI
+        c.RoutePrefix = "api-docs";  // URL для доступа к Swagger UI будет http://localhost:5000/api-docs
+    });
+
+    app.UseRouting();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
 }
 
+app.UseSwaggerUI(c =>
 {
-  "Redis": {
-    "ConnectionString": "localhost:6379,abortConnect=false,ssl=true,password=your_secure_password"
-  }
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+    // Настройка кастомного URL для Swagger UI
+    c.RoutePrefix = "api-docs";  // URL для доступа к Swagger UI будет http://localhost:5000/api-docs
+});
+
+c.RoutePrefix = string.Empty;
