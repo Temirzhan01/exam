@@ -1,51 +1,20 @@
-public void ConfigureServices(IServiceCollection services)
+if (app.Environment.IsDevelopment())
 {
-    services.AddControllers();
-    
-    // Добавление Swagger генерации документации
-    services.AddSwaggerGen(c =>
-    {
-        c.SwaggerDoc("v1", new OpenApiInfo 
-        { 
-            Title = "My API", 
-            Version = "v1" 
-        });
-    });
-}
-
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-{
-    if (env.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-    }
-
-    // Включение middleware для генерации JSON документации
     app.UseSwagger();
-
-    // Включение middleware для Swagger UI
-    app.UseSwaggerUI(c =>
+    app.UseSwaggerUI(swag => 
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-
-        // Настройка кастомного URL для Swagger UI
-        c.RoutePrefix = "api-docs";  // URL для доступа к Swagger UI будет http://localhost:5000/api-docs
-    });
-
-    app.UseRouting();
-
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers();
+        swag.SwaggerEndpoint("/swagger/v1/swagger.json", "TemplateExample");
+        swag.RoutePrefix = "swagger/swagger.json";
     });
 }
 
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            builder.Services.AddSwaggerGen(s => 
+            {
+                s.SwaggerDoc("TemplateExample", new OpenApiInfo
+                {
+                    Title = "TemplateExample",
+                    Version = "v1"
+                });
+            });
 
-    // Настройка кастомного URL для Swagger UI
-    c.RoutePrefix = "api-docs";  // URL для доступа к Swagger UI будет http://localhost:5000/api-docs
-});
-
-c.RoutePrefix = string.Empty;
+            я добавил такие хуйнюшки, но проект открывается на ссылку https://localhost:44355/swagger
