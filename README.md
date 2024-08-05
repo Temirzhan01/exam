@@ -207,3 +207,10 @@ public async Task PublishAsync(string channel, string message)
 }
 Заключение
 Работа с Redis в .NET 8 через библиотеку StackExchange.Redis проста и интуитивно понятна. Следуя этим шагам, вы можете настроить подключение, использовать Redis для хранения данных, реализовать Pub/Sub и даже оптимизировать параметры подключения. Если у вас появятся дополнительные вопросы или задачи, связанные с Redis, не стесняйтесь обращаться!
+
+
+            builder.Services.AddDbContext<OracleDbContext>(options =>
+            {
+                var constrBuilder = new OracleConnectionStringBuilder(builder.Configuration.GetConnectionString("OracleConnectionString"));
+                options.UseOracle(constrBuilder.ConnectionString, options => options.UseOracleSQLCompatibility()); //тут не принимает строку, только объект класса OracleSQLCompatibility, хотя можно было прописать строкой "11"
+            });
