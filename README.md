@@ -1,85 +1,29 @@
-    public interface IRepository<T> //Есть у меня такой интерфейс и наследуемые классы
+public class RedisService : IRedisService
+{
+    private readonly IConnectionMultiplexer _connectionMultiplexer;
+    private readonly AsyncRetryPolicy _retryPolicy;
+
+    public RedisService(IConnectionMultiplexer connectionMultiplexer)
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(int id);
-        Task AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(int id);
+        _connectionMultiplexer = connectionMultiplexer;
+        _retryPolicy = Policy.Handle<RedisConnectionException>()
+                             .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2));
     }
 
-    public class PostgreEntityRepository : IRepository<Entity> //для работы с потгре
-{ 
-    private readonly PostgreDbContext _context;
-    public PostgreEntityRepository(PostgreDbContext context)
+    public async Task<string> GetValueAsync(string key)
     {
-        _context = context;
-    }
-
-    public async Task<IEnumerable<Entity>> GetAllAsync() 
-    {
-        return await _context.Entities.ToListAsync();
-    }
-    public async Task<Entity> GetByIdAsync(int id) 
-    {
-        return await _context.Entities.FindAsync(id);
-    }
-    public async Task AddAsync(Entity entity) 
-    {
-        await _context.Entities.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
-    public async Task UpdateAsync(Entity entity) 
-    {
-        _context.Entities.Update(entity);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(int id) 
-    {
-        var entity = await _context.Entities.FindAsync(id);
-        if (entity != null)
+        return await _retryPolicy.ExecuteAsync(async () =>
         {
-            _context.Entities.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
+            var db = _connectionMultiplexer.GetDatabase();
+            return await db.StringGetAsync(key);
+        });
     }
+
+    // Другие методы остаются без изменений
 }
 
-    public class OracleEntityRepository : IRepository<Entity> // для работы с оракл
-    {
-        private readonly OracleDbContext _context;
-        public OracleEntityRepository(OracleDbContext context)
-        {
-            _context = context;
-        }
-        public async Task<IEnumerable<Entity>> GetAllAsync()
-        {
-            return await _context.Entities.ToListAsync();
-        }
-        public async Task<Entity> GetByIdAsync(int id)
-        {
-            return await _context.Entities.FindAsync(id);
-        }
-        public async Task AddAsync(Entity entity)
-        {
-            await _context.Entities.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-        public async Task UpdateAsync(Entity entity)
-        {
-            _context.Entities.Update(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var entity = await _context.Entities.FindAsync(id);
-            if (entity != null)
-            {
-                _context.Entities.Remove(entity);
-                await _context.SaveChangesAsync();
-            }
-        }
-    }
-
-    Вот смотри, как мне их внедрить ? типа тут нет разницы для оракл или пострге, для каждой сущности свой репозиторий, типа OracleProductRepository, не суть, просто как внутри условно контроллера взять и использовать тот или иной репозиторий? пох на типы баз братан, или вовсе убрать обощение  с интерфейса? 
+{
+  "Redis": {
+    "ConnectionString": "localhost:6379,abortConnect=false,ssl=true,password=your_secure_password"
+  }
+}
