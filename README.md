@@ -1,189 +1,93 @@
-Давайте начнем с файла Program.cs и основных конфигураций. ​​
+{"@timestamp":"2024-08-21T16:25:53.7422299+05:00","level":"Warning","messageTemplate":"The WebRootPath was not found: {WebRootPath}. Static files may be unavailable.","message":"The WebRootPath was not found: \"/app/wwwroot\". Static files may be unavailable.","fields":{"WebRootPath":"/app/wwwroot","EventId":{"Id":16,"Name":"WebRootPathNotFound"},"SourceContext":"Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware"}}
+{"@timestamp":"2024-08-21T16:25:53.8277821+05:00","level":"Error","messageTemplate":"Hosting failed to start","message":"Hosting failed to start","exceptions":[{"Depth":0,"ClassName":"System.Net.Sockets.SocketException","Message":"Permission denied","Source":"System.Net.Sockets","StackTraceString":"   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)\n   at System.Net.Sockets.Socket.Bind(EndPoint localEP)\n   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)\n   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()\n   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()\n--- End of stack trace from previous location ---\n   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)\n   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)\n   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)\n   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)","RemoteStackTraceString":null,"RemoteStackIndex":0,"HResult":-2147467259,"HelpURL":null}],"fields":{"EventId":{"Id":11,"Name":"HostedServiceStartupFaulted"},"SourceContext":"Microsoft.Extensions.Hosting.Internal.Host"}}
+Unhandled exception. System.Net.Sockets.SocketException (13): Permission denied
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in /src/Template/Program.cs:line 62
 
-В файле Program.cs видны основные настройки приложения, включая настройку глобального логгера с использованием Serilog, добавление сервисов и конфигураций, а также настройку Health Checks. Вот некоторые рекомендации по улучшению:
+Получаем ошибку при развертывании приложения 
 
-Логгирование ошибок конфигурации:
+using Serilog.Formatting.Elasticsearch;
+using Serilog;
+using Template.Extensions.MiddleWares;
+using Template.Extensions;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
 
-Важно добавлять больше информации в логгирование ошибок, чтобы легче было диагностировать проблемы.
-Пример: Добавить в catch блоки в случае ошибок при загрузке конфигураций.
-Консистентность форматирования и обработки ошибок:
+var builder = WebApplication.CreateBuilder(args);
 
-Если где-то используется асинхронная обработка, убедитесь, что это делается повсеместно. Например, HealthCheckOptions использует асинхронный метод, но другие места могут не следовать этому принципу.
-Управление зависимостями:
+Serilog.Debugging.SelfLog.Enable(Console.Error);
 
-Проверить, что все зависимости действительно необходимы. Например, если Newtonsoft.Json используется только в одном месте, можно заменить его на встроенные в .NET средства сериализации.
-Чистота кода:
+Log.Logger = new LoggerConfiguration() // Настраиваем глобальный логгер проекта Serilog, с выводом в консоль логов, читаем для Еластика формате
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new ElasticsearchJsonFormatter())
+    .CreateLogger();
 
-Рассмотрите возможность вынесения больших конфигураций (например, HealthCheckOptions) в отдельные методы или классы, чтобы Program.cs был более читабельным.
-Теперь я перейду к анализу остальных файлов и дам рекомендации по улучшению контроллеров, сервисов и репозиториев. ​​
+builder.Host.UseSerilog();
 
-Контроллер HomeController представляет собой основной API-контроллер с несколькими методами, взаимодействующими с разными сервисами и хранилищами данных. Вот несколько предложений по улучшению:
+//builder.AddConsulConfiguration(); // Получаем конфигурации проекта из консула, при первичном запуске проекта
 
-1. Улучшение обработки ошибок и логгирования:
-В методах, таких как GetFromRedis, можно расширить обработку ошибок, логгируя ситуации, когда данные не были найдены. Это поможет в диагностике проблем.
-Метод ProduceToKafka имеет обработку исключений, но сообщение об ошибке передается напрямую из InnerException. Лучше передавать кастомизированное сообщение, чтобы не раскрывать внутренние детали исключений клиентам.
-Рекомендация:
-
-csharp
-Копировать код
-catch (Exception ex)
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
 {
-    _logger.LogError("An error occurred while producing to Kafka: {Error}", ex.Message);
-    return StatusCode(500, new { message = "An error occurred while processing your request." });
-}
-2. Валидация и улучшение читаемости:
-В методе SetInRedis можно объединить проверку key и value с использованием модели данных, чтобы уменьшить количество ручных проверок и повысить читаемость кода.
-Пример:
+    options.AddPolicy("AllowAll", builder => builder.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true));
+});
+builder.Services.AddHealthChecks(builder.Configuration); // добавляем кастомные хелзчеки
+builder.AddServices(); // Внедряем все зависимости проекта
+builder.AddDbContexts(); // Внедряем контексты бд
+builder.AddKafka(); // Внедряем кафку
+builder.AddRedis(); // Внедряем редис
 
-csharp
-Копировать код
-public class RedisModel
-{
-    [Required]
-    public string Key { get; set; }
-    
-    [Required]
-    public string Value { get; set; }
-}
+var app = builder.Build();
 
-[HttpPost]
-[Route("SetInRedis")]
-public async Task<ActionResult> SetInRedis([FromBody] RedisModel model)
+app.MapHealthChecks("/healthz", new HealthCheckOptions // Добавляем entrypoint для получения хелзчека работы приложения, и настраиваем для вывода в едином формате 
 {
-    if (!ModelState.IsValid)
-    {
-        return BadRequest(ModelState);
+    ResponseWriter = async (context, report) => {
+        context.Response.ContentType = "application/json";
+        var result = new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(x => new { name = x.Key, response = x.Value.Status.ToString(), description = x.Value.Description })
+        };
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(result));
     }
-    await _service.SetInRedis(model.Key, model.Value);
-    return Ok();
-}
-3. Улучшение маршрутизации:
-Использование атрибутов [Route("api/[controller]")] на уровне контроллера хорошо, но если методы относятся к одному функциональному блоку, возможно, стоит сгруппировать их по маршрутам для лучшей организации и понимания API.
-4. Документация и комментарии:
-Добавление XML-комментариев ко всем публичным методам контроллера может улучшить читаемость и поддержку кода, особенно если проект служит шаблоном для команды.
-Теперь я перейду к анализу сервисов и репозиториев, после чего предложу дополнительные улучшения. ​​
+});
 
-В классе Service реализованы методы, работающие с различными источниками данных (Oracle, PostgreSQL, Redis), а также методы для взаимодействия с внешними сервисами через REST и SOAP. Вот несколько рекомендаций по улучшению:
-
-1. Инъекция зависимостей и тестируемость:
-Использование большого количества зависимостей в конструкторе класса может затруднить тестирование и сопровождение кода. Рекомендуется использовать отдельные сервисы или интерфейсы для обработки каждой логики, чтобы уменьшить количество зависимостей.
-Рефакторинг: Разделите логику на отдельные сервисы, например, DatabaseService, CacheService, MessagingService, и инъектируйте их в Service.
-2. Упрощение сериализации и десериализации:
-Везде используется JsonConvert из Newtonsoft.Json. С учетом того, что .NET Core предоставляет встроенную поддержку JSON через System.Text.Json, можно рассмотреть возможность использования встроенных средств для сериализации и десериализации. Это уменьшит внешние зависимости.
-Пример:
-csharp
-Копировать код
-var jsonString = JsonSerializer.Serialize(model);
-3. Асинхронность и обработка исключений:
-Обработка ошибок при работе с внешними сервисами должна быть более детализированной, чтобы не только логировать ошибки, но и обеспечить корректную обработку ситуаций, таких как таймауты или неудачные попытки соединения.
-Пример:
-
-csharp
-Копировать код
-try
+if (builder.Configuration["SwaggerEnvironment"] == "Development")
 {
-    var response = await _httpClient.SendAsync(message);
-    response.EnsureSuccessStatusCode();
-    return JsonSerializer.Deserialize<ExampleModel>(await response.Content.ReadAsStringAsync());
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-catch (HttpRequestException ex)
-{
-    _logger.LogError("An error occurred during REST call: {Message}", ex.Message);
-    throw new CustomException("Failed to complete REST call", ex);
-}
-4. Оптимизация использования ресурсов:
-Если HttpClient используется для множества запросов, можно рассмотреть возможность повторного использования одного и того же экземпляра HttpClient или создания пулов клиентов для оптимизации использования ресурсов.
-5. Кеширование и работа с Redis:
-Методы работы с Redis используют строки для ключей и значений. Это может привести к ошибкам при изменении структуры данных. Рассмотрите возможность создания отдельных объектов или DTO для работы с кэшем, чтобы структура данных была более строгой.
-6. Логирование и отладка:
-Используйте структурированное логирование, чтобы лучше фиксировать и анализировать данные. Вместо простых строк используйте форматированные строки с параметрами.
-Теперь я перейду к анализу юнит-тестов, чтобы проверить, насколько хорошо покрыты основные компоненты вашего кода, и предложу возможные улучшения. ​​
 
-Юнит-тесты для HomeController проверяют несколько ключевых сценариев использования, что является хорошей практикой. Вот несколько рекомендаций и предложений по улучшению:
+app.UseMiddleware<ApiKeyMiddleware>(); // Используем кастомный компонент middleware для аутентификации на основе апи ключа
 
-1. Использование строгой типизации и инициализации:
-Текущая инициализация Mock<IService> в тестах происходит глобально для всего класса. Это может привести к тому, что состояния моков будут перенесены между тестами, что нежелательно. Лучше инициализировать мок-объекты в методах Arrange каждого теста.
-Пример:
-csharp
-Копировать код
-public class TestHomeController
-{
-    private Mock<IService> _serviceMock;
+app.UseHttpsRedirection();
 
-    public TestHomeController()
-    {
-        _serviceMock = new Mock<IService>();
-    }
+app.UseStaticFiles();
 
-    [Fact]
-    public async Task GetFromRedisAsync_ShouldReturn200Status()
-    {
-        // Arrange
-        string key = "Key";
-        _serviceMock.Setup(service => service.GetFromRedis(key))
-                    .ReturnsAsync(HomeMockData.GetFromRedisValue());
-        var controller = new HomeController(null, _serviceMock.Object);
+app.MapControllers();
 
-        // Act
-        var result = (OkObjectResult)await controller.GetFromRedis(key);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.StatusCode.Should().Be(200);
-    }
-}
-2. Улучшение ассертов:
-Вместо того чтобы просто проверять статус кодов, можно добавить дополнительные ассерты для проверки возвращаемого значения (например, содержимого тела ответа). Это улучшит покрытие и выявит потенциальные проблемы в возвращаемых данных.
-Пример:
-
-csharp
-Копировать код
-result.Value.Should().BeEquivalentTo(HomeMockData.GetFromRedisValue());
-3. Тестирование исключений:
-Можно добавить тесты на проверку обработки исключений, чтобы убедиться, что контроллер корректно обрабатывает ошибки и возвращает правильные HTTP-статусы.
-Пример:
-
-csharp
-Копировать код
-[Fact]
-public async Task GetFromRedisAsync_ShouldReturn500OnException()
-{
-    // Arrange
-    string key = "Key";
-    _serviceMock.Setup(service => service.GetFromRedis(key))
-                .ThrowsAsync(new Exception("Database error"));
-    var controller = new HomeController(null, _serviceMock.Object);
-
-    // Act
-    var result = (ObjectResult)await controller.GetFromRedis(key);
-
-    // Assert
-    result.StatusCode.Should().Be(500);
-    result.Value.Should().Be("An error occurred while processing your request.");
-}
-4. Покрытие негативных сценариев:
-Добавьте тесты для проверки поведения контроллера в случае, если сервис возвращает неожиданные или некорректные данные (например, null, пустые строки или объекты).
-5. Чистота кода:
-Сохраняйте тесты в чистом виде, используя стандартные методы для подготовки (Arrange), выполнения (Act) и проверки (Assert). Это делает тесты более читаемыми и легкими для поддержки.
-Эти изменения помогут улучшить качество тестов, сделать их более надежными и повысить уверенность в том, что контроллеры работают корректно во всех возможных сценариях. Если у вас есть конкретные вопросы или хотите, чтобы я сосредоточился на других частях проекта, дайте знать! ​​
-
-Вы сказали:
-А в целом что скажешь, оценку сделай
-ChatGPT сказал:
-В целом ваш проект выглядит довольно хорошо структурированным и профессионально выполненным, особенно с учетом того, что он предназначен для использования в качестве шаблона для команды. Вот мои основные наблюдения и оценка:
-
-Сильные стороны:
-Структура проекта: Проект хорошо организован. Используются правильные принципы разделения ответственности, такие как использование слоев контроллеров, сервисов и репозиториев.
-Использование современных технологий: В проекте применяются современные подходы и библиотеки, такие как Serilog для логгирования, использование Consul для конфигурации, а также работа с различными базами данных (Oracle, PostgreSQL).
-Тестирование: Наличие юнит-тестов — это большой плюс. Вы проверяете критически важные сценарии, что помогает в поддержке качества кода.
-Рекомендации по улучшению:
-Упрощение кода и оптимизация зависимостей: В некоторых местах (например, в Service.cs) количество зависимостей может быть слишком большим, что усложняет тестирование и поддержку. Разделение на более мелкие сервисы улучшит модульность и тестируемость.
-Обработка ошибок и логгирование: Логгирование и обработка ошибок в контроллерах и сервисах могут быть улучшены для более точного отслеживания и диагностики проблем. Важно избегать раскрытия внутренней информации в исключениях.
-Тестовое покрытие: Несмотря на наличие юнит-тестов, стоит расширить покрытие для обработки негативных сценариев и исключений. Это поможет убедиться, что код работает корректно даже в неожиданных ситуациях.
-Оптимизация использования библиотек: Рассмотрите возможность использования встроенных возможностей .NET, таких как System.Text.Json, для уменьшения внешних зависимостей.
-Оценка:
-Качество кода: 8/10 — Хорошо написанный код, но есть возможности для оптимизации и улучшения читаемости.
-Тестирование: 7/10 — Основные сценарии покрыты, но есть пробелы в негативных тестах и тестах обработки исключений.
-Архитектура: 8/10 — Хорошая структура, но некоторые сервисы можно разделить для лучшей модульности.
-Итог:
-Ваш проект находится на хорошем уровне и вполне может служить шаблоном для команды. Внедрение предложенных улучшений поможет сделать его более устойчивым, оптимизированным и поддерживаемым в долгосрочной перспективе. С небольшими корректировками он может стать действительно "идеальной" версией веб-API.
+app.Run();
