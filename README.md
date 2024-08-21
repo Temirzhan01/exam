@@ -55,7 +55,6 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder => builder.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true));
 });
-builder.Services.AddHealthChecks(builder.Configuration); // добавляем кастомные хелзчеки
 builder.AddServices(); // Внедряем все зависимости проекта
 builder.AddDbContexts(); // Внедряем контексты бд
 builder.AddKafka(); // Внедряем кафку
