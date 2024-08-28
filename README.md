@@ -1,3 +1,7 @@
+        [RegularExpression(@"^[\d\s]+$", ErrorMessage = "'{0}' может принимать только цифровое значение")]
+        [DisplayName("Сумма ФИ")]
+        public decimal FISum { get; set; }
 
-        [RegularExpression(@"^\d+$", ErrorMessage = "'{0}' может принимать только цифровое значение")]
- Как убрать ограничение на символ пробела? 
+                            <div class="col-md-6 FiSumClass">@Html.HtmlText(m => Model.RequestedConditions[Model.index].FISum, "list-alt", Model.FISumPropertiesProperties.readOnly, "Введите сумму", "Requested")</div>
+
+        The field Сумма ФИ must be a number.
