@@ -1,35 +1,9 @@
-using (var connection = new OracleConnection(connectionString))
-{
-    connection.Open();
-
-    using (var command = new OracleCommand("cardcolv.P_reference_ForService10.GetAutorityPersonsNew", connection))
-    {
-        command.CommandType = CommandType.StoredProcedure;
-
-        command.Parameters.Add(new OracleParameter("Login_", OracleDbType.Varchar2, login.ToUpper(), ParameterDirection.Input));
-        command.Parameters.Add(new OracleParameter("cur_out", OracleDbType.RefCursor, ParameterDirection.Output));
-
-        using (var reader = command.ExecuteReader())
+        public async Task<string> GetBranchAndFillialInfoAsync(string login)
         {
-            var result = new List<AuthorizedPerson>();
+            var query = "SELECT l.ow_fi FROM t_users t, t_branch tb, l_filial l WHERE UPPER(t.login) = UPPER(':LOGIN') AND tb.id = (SELECT tb.id FROM t_branch tb WHERE tb.parentid='267' START WITH tb.id = t.branchid CONNECT BY PRIOR tb.parentid = tb.id) AND l.id = tb.id";
 
-            while (reader.Read())
+            using (var connection = _context.CreateConnection()) 
             {
-                result.Add(new AuthorizedPerson
-                {
-                    username = reader.GetString(reader.GetOrdinal("username")),
-                    attributname = reader.GetString(reader.GetOrdinal("attributname")),
-                    attorney_date = reader.GetString(reader.GetOrdinal("attorney_date")),
-                    attorney = reader.GetString(reader.GetOrdinal("attorney")),
-                    login = reader.GetString(reader.GetOrdinal("login")),
-                    attributid = reader.GetString(reader.GetOrdinal("attributid")),
-                    branch = reader.GetString(reader.GetOrdinal("branch")),
-                    branchid = reader.GetInt32(reader.GetOrdinal("branchid")),
-                    authorityType = reader.GetString(reader.GetOrdinal("authorityType")),
-                });
+                return await connection.QueryFirstAsync<string>(query, new { LOGIN = login });  //посмотри, я пытаюсь выполнить селект который возвращает одно значение, правильно ли для оракл 11? через даппер
             }
-
-            return result;
         }
-    }
-}
