@@ -15,3 +15,8 @@ if (builder.Configuration["Environment"] == "Development")
         c.RoutePrefix = basePath;
     });
 }
+
+
+в файле https://spmngokd-dev.halykbank.nb/userinfoservice/swagger/v1/swagger.json по данному пути 
+
+ссылки на ендпоинты выглядят так "/api/Users/GetBranchInfo/{login}/{level}": {
